@@ -1,0 +1,56 @@
+patient_id,user_id,dob,blood_group,medical_history
+1,51,1952-11-03,O-,Type 2 diabetes since 2018
+2,52,1962-08-20,AB+,Type 2 diabetes since 2018
+3,53,2000-09-22,B-,"Anxiety disorder, managed"
+4,54,2001-11-07,AB+,No known allergies or conditions
+5,55,1977-12-14,O+,No known allergies or conditions
+6,56,1953-01-27,O+,Chronic lower back pain
+7,57,1954-09-08,B-,Type 2 diabetes since 2018
+8,58,2004-01-22,O-,"Hypertension, controlled with medication"
+9,59,2002-07-14,A+,"Hypertension, controlled with medication"
+10,60,1983-01-21,B+,Type 2 diabetes since 2018
+11,61,1952-04-13,O+,No known allergies or conditions
+12,62,2004-03-29,A-,Seasonal allergies
+13,63,1968-08-12,O+,No known allergies or conditions
+14,64,2006-02-20,O-,"Anxiety disorder, managed"
+15,65,1984-06-03,AB+,"Anxiety disorder, managed"
+16,66,1994-01-02,A+,"Hypertension, controlled with medication"
+17,67,1991-09-17,AB+,Chronic lower back pain
+18,68,1973-06-22,A-,Previous appendectomy 2015
+19,69,1954-11-01,O+,Type 2 diabetes since 2018
+20,70,1959-10-18,O-,No significant medical history
+21,71,1964-04-27,AB+,"Anxiety disorder, managed"
+22,72,1998-10-14,B+,"Anxiety disorder, managed"
+23,73,1972-12-11,A-,Previous appendectomy 2015
+24,74,2002-05-16,B-,Type 2 diabetes since 2018
+25,75,1969-08-12,AB-,Type 2 diabetes since 2018
+26,76,1994-03-14,A+,No known allergies or conditions
+27,77,1958-06-28,AB-,"Hypothyroidism, on levothyroxine"
+28,78,2007-09-15,A+,"Hypertension, controlled with medication"
+29,79,1992-05-17,AB-,Previous appendectomy 2015
+30,80,1979-06-03,B-,No significant medical history
+31,81,2006-11-20,B-,No known allergies or conditions
+32,82,1953-06-27,A-,"Hypertension, controlled with medication"
+33,83,1975-09-22,O-,"Hypertension, controlled with medication"
+34,84,1999-01-07,B+,Type 2 diabetes since 2018
+35,85,1970-02-16,O-,"Anxiety disorder, managed"
+36,86,1994-12-23,B+,Previous appendectomy 2015
+37,87,2005-10-03,O+,"Asthma, uses inhaler as needed"
+38,88,1973-05-20,B-,Previous appendectomy 2015
+39,89,1995-03-29,O+,Chronic lower back pain
+40,90,1952-02-03,O-,"Anxiety disorder, managed"
+41,91,1966-03-24,O-,"Hypertension, controlled with medication"
+42,92,2007-12-11,B-,"Asthma, uses inhaler as needed"
+43,93,1978-10-30,A-,Chronic lower back pain
+44,94,1971-01-04,A+,No known allergies or conditions
+45,95,2004-12-17,B-,No known allergies or conditions
+46,96,1975-06-03,B-,No significant medical history
+47,97,1989-10-18,A-,No significant medical history
+48,98,1988-09-10,B-,"Hypertension, controlled with medication"
+49,99,1955-05-06,A+,Chronic lower back pain
+50,100,1986-04-03,A-,"Anxiety disorder, managed"
+51,101,1996-08-29,B-,Previous appendectomy 2015
+52,102,1991-09-26,O-,"Asthma, uses inhaler as needed"
+53,103,1955-02-17,B+,No known allergies or conditions
+54,104,1959-04-27,O-,"Asthma, uses inhaler as needed"
+55,105,1991-08-26,O-,Seasonal allergies

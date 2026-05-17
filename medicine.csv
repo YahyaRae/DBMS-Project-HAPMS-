@@ -1,0 +1,61 @@
+medicine_id,name,type,manufacturer,description
+1,Amoxicillin,Antibiotic,GlaxoSmithKline,Broad-spectrum penicillin antibiotic
+2,Ibuprofen,Analgesic,Pfizer,NSAID for pain and inflammation
+3,Paracetamol,Analgesic,Johnson & Johnson,Antipyretic and mild analgesic
+4,Metformin,Antidiabetic,Novartis,First-line medication for type 2 diabetes
+5,Lisinopril,ACE Inhibitor,AstraZeneca,Treats hypertension and heart failure
+6,Atorvastatin,Statin,Pfizer,Lowers LDL cholesterol
+7,Omeprazole,PPI,AstraZeneca,Reduces stomach acid production
+8,Azithromycin,Antibiotic,Pfizer,Macrolide antibiotic for bacterial infections
+9,Ciprofloxacin,Antibiotic,Bayer,Fluoroquinolone antibiotic
+10,Salbutamol,Bronchodilator,GSK,Relieves bronchospasm in asthma
+11,Cetirizine,Antihistamine,UCB,Treats allergic rhinitis and urticaria
+12,Diclofenac,NSAID,Novartis,Anti-inflammatory for joint pain
+13,Ranitidine,H2 Blocker,Sanofi,Reduces stomach acid
+14,Metronidazole,Antibiotic,Pfizer,Treats anaerobic bacterial infections
+15,Amlodipine,Calcium Channel Blocker,Pfizer,Treats hypertension and angina
+16,Losartan,ARB,Merck,Treats high blood pressure
+17,Pantoprazole,PPI,Nycomed,Treats GERD and peptic ulcers
+18,Clopidogrel,Antiplatelet,Sanofi,Prevents blood clots
+19,Levothyroxine,Thyroid Hormone,Abbott,Treats hypothyroidism
+20,Prednisolone,Corticosteroid,Pfizer,Anti-inflammatory and immunosuppressant
+21,Sertraline,SSRI,Pfizer,Antidepressant for depression and anxiety
+22,Fluconazole,Antifungal,Pfizer,Treats fungal infections
+23,Tramadol,Opioid Analgesic,Grunenthal,Moderate to severe pain relief
+24,Warfarin,Anticoagulant,Bristol-Myers Squibb,Prevents blood clotting
+25,Aspirin,Antiplatelet,Bayer,Low-dose antiplatelet therapy
+26,Doxycycline,Antibiotic,Pfizer,Tetracycline antibiotic
+27,Furosemide,Diuretic,Sanofi,Loop diuretic for oedema and hypertension
+28,Spironolactone,Diuretic,Pfizer,Potassium-sparing diuretic
+29,Gabapentin,Anticonvulsant,Pfizer,Treats neuropathic pain and seizures
+30,Bisoprolol,Beta Blocker,Merck,Treats hypertension and heart failure
+31,Carvedilol,Beta Blocker,GlaxoSmithKline,Treats heart failure and hypertension
+32,Allopurinol,Antigout,Aspen,Reduces uric acid production
+33,Lansoprazole,PPI,Takeda,Treats peptic ulcers and GERD
+34,Clonazepam,Benzodiazepine,Roche,Treats seizures and panic disorder
+35,Methylprednisolone,Corticosteroid,Pfizer,Treats inflammatory conditions
+36,Naproxen,NSAID,Bayer,Anti-inflammatory analgesic
+37,Glibenclamide,Antidiabetic,Sanofi,Stimulates insulin secretion
+38,Enalapril,ACE Inhibitor,Merck,Treats hypertension and heart failure
+39,Clarithromycin,Antibiotic,Abbott,Macrolide antibiotic
+40,Ceftriaxone,Antibiotic,Roche,Third-generation cephalosporin
+41,Hydrocortisone,Corticosteroid,Pfizer,Topical anti-inflammatory
+42,Nifedipine,Calcium Channel Blocker,Bayer,Treats angina and hypertension
+43,Roxithromycin,Antibiotic,Sanofi,Macrolide antibiotic
+44,Esomeprazole,PPI,AstraZeneca,Treats acid reflux and ulcers
+45,Valsartan,ARB,Novartis,Treats hypertension and heart failure
+46,Telmisartan,ARB,Boehringer,Treats hypertension
+47,Rosuvastatin,Statin,AstraZeneca,Reduces cardiovascular risk
+48,Insulin Glargine,Insulin,Sanofi,Long-acting insulin for diabetes
+49,Levofloxacin,Antibiotic,Johnson & Johnson,Treats respiratory infections
+50,Meropenem,Antibiotic,AstraZeneca,Broad-spectrum carbapenem antibiotic
+51,Montelukast,Leukotriene Antagonist,Merck,Treats asthma and allergic rhinitis
+52,Lactulose,Laxative,Fresenius,Treats constipation and hepatic encephalopathy
+53,Domperidone,Antiemetic,Janssen,Treats nausea and vomiting
+54,Ondansetron,Antiemetic,GlaxoSmithKline,Prevents chemotherapy-induced nausea
+55,Folic Acid,Vitamin,Various,Prevents neural tube defects
+56,Ferrous Sulfate,Iron Supplement,Various,Treats iron-deficiency anaemia
+57,Vitamin D3,Vitamin,Various,Treats vitamin D deficiency
+58,Calcium Carbonate,Mineral Supplement,Various,Treats calcium deficiency
+59,Zinc Sulfate,Mineral Supplement,Various,Treats zinc deficiency and diarrhoea
+60,Betamethasone,Corticosteroid,GlaxoSmithKline,Anti-inflammatory corticosteroid
