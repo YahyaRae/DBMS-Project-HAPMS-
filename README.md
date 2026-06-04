@@ -28,6 +28,7 @@ Full schema documentation → docs/HAPMS_Milestone1_Schema.docx
 Project Status
 
 Milestone 1 complete — ERD and relational schema defined.
+Upto 5 milestones completed.
 
 
  Entity-Relationship Diagram
