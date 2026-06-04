@@ -16,29 +16,29 @@
 const{useState,useEffect,useRef,useCallback,createContext,useContext}=React;
 
 const C={
-  bg:"#0B0D0F",sf:"#111418",el:"#161B22",ov:"#1C2230",
-  bd:"rgba(255,255,255,.06)",bdm:"rgba(255,255,255,.10)",bdf:"rgba(34,197,94,.35)",
-  tx:"#F8FAFC",t2:"#94A3B8",t3:"#64748B",t4:"#334155",
-  gr:"#22C55E",grb:"rgba(34,197,94,.08)",grd:"rgba(34,197,94,.16)",
-  bl:"#3B82F6",blb:"rgba(59,130,246,.08)",
-  am:"#F59E0B",amb:"rgba(245,158,11,.08)",
-  rd:"#EF4444",rdb:"rgba(239,68,68,.08)",
-  pu:"#8B5CF6",pub:"rgba(139,92,246,.08)",
-  te:"#14B8A6",teb:"rgba(20,184,166,.08)",
+  bg:"#F4FBF7",sf:"#FFFFFF",el:"#EEF7F2",ov:"#E4F0E9",
+  bd:"rgba(97,139,74,.12)",bdm:"rgba(97,139,74,.25)",bdf:"rgba(97,139,74,.45)",
+  tx:"#1A2E14",t2:"#3D5C31",t3:"#7AA095",t4:"#AFBC88",
+  gr:"#618B4A",grb:"rgba(97,139,74,.08)",grd:"rgba(97,139,74,.16)",
+  bl:"#3D7AB5",blb:"rgba(61,122,181,.08)",
+  am:"#B8720A",amb:"rgba(184,114,10,.08)",
+  rd:"#B84545",rdb:"rgba(184,69,69,.08)",
+  pu:"#7054B0",pub:"rgba(112,84,176,.08)",
+  te:"#2E8B8B",teb:"rgba(46,139,139,.08)",
   fn:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",
   mo:"'JetBrains Mono',monospace",
 };
 
-const SPECS=["Cardiology","Neurology","Orthopedics","Pediatrics","Dermatology","General Practice","Gynecology","ENT","Psychiatry","Oncology"];
+const SPECS=["Cardiology","Neurology","Orthopedics","Pediatrics","Dermatology","General Practice","Gynecology","ENT","Psychiatry","Ophthalmology","Oncology"];
 const BLOOD=["A+","A-","B+","B-","AB+","AB-","O+","O-"];
-const MED_TYPES=["Antibiotic","Analgesic","Antidiabetic","ACE Inhibitor","Statin","PPI","Bronchodilator","Antihistamine","Antiviral","Antifungal","Antihypertensive","Antidepressant","Vitamin/Supplement","Other"];
+const MED_TYPES=["Antibiotic","Analgesic","Antidiabetic","ACE Inhibitor","ARB","Statin","PPI","H2 Blocker","Bronchodilator","Antihistamine","Calcium Channel Blocker","Beta Blocker","Thyroid Hormone","Corticosteroid","SSRI","Antifungal","Opioid Analgesic","Anticoagulant","Antiplatelet","Diuretic","Anticonvulsant","Antigout","Benzodiazepine","NSAID","Leukotriene Antagonist","Laxative","Antiemetic","Vitamin","Iron Supplement","Mineral Supplement","Insulin","Other"];
 
 const AUTH_USERS=[
-  {username:"admin",  password:"admin123", role:"admin",        name:"System Admin",     avatar:"SA"},
-  {username:"fatima", password:"doc123",   role:"doctor",       name:"Dr. Fatima Malik", avatar:"FM", doctorId:1},
-  {username:"usman",  password:"doc123",   role:"doctor",       name:"Dr. Usman Tariq",  avatar:"UT", doctorId:2},
-  {username:"ayesha", password:"doc123",   role:"doctor",       name:"Dr. Ayesha Raza",  avatar:"AR", doctorId:3},
-  {username:"recep",  password:"recep123", role:"receptionist", name:"Reception Desk",   avatar:"RD"},
+  {username:"admin",   password:"admin123", role:"admin",        name:"System Admin",         avatar:"SA"},
+  {username:"allison", password:"doc123",   role:"doctor",       name:"Dr. Allison Hill",      avatar:"AH", doctorId:1},
+  {username:"daniel",  password:"doc123",   role:"doctor",       name:"Dr. Daniel Brown",      avatar:"DB", doctorId:13},
+  {username:"cody",    password:"doc123",   role:"doctor",       name:"Dr. Cody Williams",     avatar:"CW", doctorId:35},
+  {username:"recep",   password:"recep123", role:"receptionist", name:"Reception Desk",        avatar:"RD"},
 ];
 
 const SEED={
@@ -51,37 +51,477 @@ const SEED={
     {id:6,name:"Atorvastatin",type:"Statin",manufacturer:"Pfizer",stock:700,price:200},
     {id:7,name:"Omeprazole",type:"PPI",manufacturer:"AstraZeneca",stock:900,price:95},
     {id:8,name:"Azithromycin",type:"Antibiotic",manufacturer:"Pfizer",stock:180,price:180},
-    {id:9,name:"Salbutamol",type:"Bronchodilator",manufacturer:"GSK",stock:90,price:220},
-    {id:10,name:"Cetirizine",type:"Antihistamine",manufacturer:"UCB",stock:1100,price:55},
+    {id:9,name:"Ciprofloxacin",type:"Antibiotic",manufacturer:"Bayer",stock:450,price:160},
+    {id:10,name:"Salbutamol",type:"Bronchodilator",manufacturer:"GSK",stock:90,price:220},
+    {id:11,name:"Cetirizine",type:"Antihistamine",manufacturer:"UCB",stock:1100,price:55},
+    {id:12,name:"Diclofenac",type:"NSAID",manufacturer:"Novartis",stock:750,price:75},
+    {id:13,name:"Ranitidine",type:"H2 Blocker",manufacturer:"Sanofi",stock:400,price:65},
+    {id:14,name:"Metronidazole",type:"Antibiotic",manufacturer:"Pfizer",stock:320,price:90},
+    {id:15,name:"Amlodipine",type:"Calcium Channel Blocker",manufacturer:"Pfizer",stock:550,price:130},
+    {id:16,name:"Losartan",type:"ARB",manufacturer:"Merck",stock:480,price:145},
+    {id:17,name:"Pantoprazole",type:"PPI",manufacturer:"Nycomed",stock:650,price:110},
+    {id:18,name:"Clopidogrel",type:"Antiplatelet",manufacturer:"Sanofi",stock:280,price:190},
+    {id:19,name:"Levothyroxine",type:"Thyroid Hormone",manufacturer:"Abbott",stock:350,price:160},
+    {id:20,name:"Prednisolone",type:"Corticosteroid",manufacturer:"Pfizer",stock:420,price:80},
+    {id:21,name:"Sertraline",type:"SSRI",manufacturer:"Pfizer",stock:300,price:170},
+    {id:22,name:"Fluconazole",type:"Antifungal",manufacturer:"Pfizer",stock:200,price:140},
+    {id:23,name:"Tramadol",type:"Opioid Analgesic",manufacturer:"Grunenthal",stock:150,price:210},
+    {id:24,name:"Warfarin",type:"Anticoagulant",manufacturer:"Bristol-Myers Squibb",stock:250,price:185},
+    {id:25,name:"Aspirin",type:"Antiplatelet",manufacturer:"Bayer",stock:1500,price:35},
+    {id:26,name:"Doxycycline",type:"Antibiotic",manufacturer:"Pfizer",stock:380,price:115},
+    {id:27,name:"Furosemide",type:"Diuretic",manufacturer:"Sanofi",stock:520,price:100},
+    {id:28,name:"Spironolactone",type:"Diuretic",manufacturer:"Pfizer",stock:310,price:125},
+    {id:29,name:"Gabapentin",type:"Anticonvulsant",manufacturer:"Pfizer",stock:260,price:195},
+    {id:30,name:"Bisoprolol",type:"Beta Blocker",manufacturer:"Merck",stock:440,price:155},
+    {id:31,name:"Carvedilol",type:"Beta Blocker",manufacturer:"GlaxoSmithKline",stock:380,price:165},
+    {id:32,name:"Allopurinol",type:"Antigout",manufacturer:"Aspen",stock:290,price:95},
+    {id:33,name:"Lansoprazole",type:"PPI",manufacturer:"Takeda",stock:470,price:105},
+    {id:34,name:"Clonazepam",type:"Benzodiazepine",manufacturer:"Roche",stock:180,price:200},
+    {id:35,name:"Methylprednisolone",type:"Corticosteroid",manufacturer:"Pfizer",stock:220,price:175},
+    {id:36,name:"Naproxen",type:"NSAID",manufacturer:"Bayer",stock:600,price:70},
+    {id:37,name:"Glibenclamide",type:"Antidiabetic",manufacturer:"Sanofi",stock:420,price:90},
+    {id:38,name:"Enalapril",type:"ACE Inhibitor",manufacturer:"Merck",stock:360,price:140},
+    {id:39,name:"Clarithromycin",type:"Antibiotic",manufacturer:"Abbott",stock:240,price:185},
+    {id:40,name:"Ceftriaxone",type:"Antibiotic",manufacturer:"Roche",stock:120,price:350},
+    {id:41,name:"Hydrocortisone",type:"Corticosteroid",manufacturer:"Pfizer",stock:300,price:115},
+    {id:42,name:"Nifedipine",type:"Calcium Channel Blocker",manufacturer:"Bayer",stock:380,price:130},
+    {id:43,name:"Roxithromycin",type:"Antibiotic",manufacturer:"Sanofi",stock:250,price:160},
+    {id:44,name:"Esomeprazole",type:"PPI",manufacturer:"AstraZeneca",stock:560,price:120},
+    {id:45,name:"Valsartan",type:"ARB",manufacturer:"Novartis",stock:490,price:155},
+    {id:46,name:"Telmisartan",type:"ARB",manufacturer:"Boehringer",stock:430,price:165},
+    {id:47,name:"Rosuvastatin",type:"Statin",manufacturer:"AstraZeneca",stock:520,price:210},
+    {id:48,name:"Insulin Glargine",type:"Insulin",manufacturer:"Sanofi",stock:85,price:450},
+    {id:49,name:"Levofloxacin",type:"Antibiotic",manufacturer:"Johnson & Johnson",stock:310,price:195},
+    {id:50,name:"Meropenem",type:"Antibiotic",manufacturer:"AstraZeneca",stock:75,price:520},
+    {id:51,name:"Montelukast",type:"Leukotriene Antagonist",manufacturer:"Merck",stock:380,price:170},
+    {id:52,name:"Lactulose",type:"Laxative",manufacturer:"Fresenius",stock:290,price:85},
+    {id:53,name:"Domperidone",type:"Antiemetic",manufacturer:"Janssen",stock:450,price:75},
+    {id:54,name:"Ondansetron",type:"Antiemetic",manufacturer:"GlaxoSmithKline",stock:200,price:240},
+    {id:55,name:"Folic Acid",type:"Vitamin",manufacturer:"Various",stock:800,price:40},
+    {id:56,name:"Ferrous Sulfate",type:"Iron Supplement",manufacturer:"Various",stock:950,price:45},
+    {id:57,name:"Vitamin D3",type:"Vitamin",manufacturer:"Various",stock:700,price:55},
+    {id:58,name:"Calcium Carbonate",type:"Mineral Supplement",manufacturer:"Various",stock:600,price:50},
+    {id:59,name:"Zinc Sulfate",type:"Mineral Supplement",manufacturer:"Various",stock:400,price:60},
+    {id:60,name:"Betamethasone",type:"Corticosteroid",manufacturer:"GlaxoSmithKline",stock:170,price:135},
   ],
   users:[
-    {id:1,name:"Dr. Fatima Malik",email:"fatima@hapms.pk",role:"doctor",phone:"+92-300-1111111"},
-    {id:2,name:"Dr. Usman Tariq",email:"usman@hapms.pk",role:"doctor",phone:"+92-300-2222222"},
-    {id:3,name:"Dr. Ayesha Raza",email:"ayesha@hapms.pk",role:"doctor",phone:"+92-300-3333333"},
-    {id:4,name:"Ahmed Khan",email:"ahmed@gmail.com",role:"patient",phone:"+92-321-4444444"},
-    {id:5,name:"Sara Hussain",email:"sara@gmail.com",role:"patient",phone:"+92-321-5555555"},
-    {id:6,name:"Bilal Chaudhry",email:"bilal@gmail.com",role:"patient",phone:"+92-321-6666666"},
-    {id:7,name:"Zara Qureshi",email:"zara@gmail.com",role:"patient",phone:"+92-321-7777777"},
+    {id:1,name:"Allison Hill",email:"donaldgarcia@example.net",role:"doctor",phone:"296-500-1338"},
+    {id:2,name:"Meredith Barnes",email:"zlawrence@example.org",role:"doctor",phone:"(865)342-3511"},
+    {id:3,name:"Gregory Baker",email:"blairamanda@example.com",role:"doctor",phone:"695-993-1034"},
+    {id:4,name:"Holly Wood",email:"elizabethmiles@example.net",role:"doctor",phone:"+1-528-232-7648"},
+    {id:5,name:"Jennifer Jones",email:"jason76@example.net",role:"doctor",phone:"423-988-4969"},
+    {id:6,name:"Anthony Rodriguez",email:"laurahenderson@example.org",role:"doctor",phone:"+1-878-448-0184"},
+    {id:7,name:"Troy Liu",email:"teresa28@example.org",role:"doctor",phone:"289-332-5288"},
+    {id:8,name:"Sherry Decker",email:"john39@example.org",role:"doctor",phone:"518-622-7824"},
+    {id:9,name:"Michael Brooks",email:"omartinez@example.org",role:"doctor",phone:"001-383-293-0103"},
+    {id:10,name:"Andrea Young",email:"ilewis@example.net",role:"doctor",phone:"001-897-737-6311"},
+    {id:11,name:"John Daniel",email:"brownjessica@example.org",role:"doctor",phone:"387-926-2473"},
+    {id:12,name:"Savannah Garcia",email:"novaksara@example.org",role:"doctor",phone:"973-460-2606"},
+    {id:13,name:"Daniel Brown",email:"adkinsbrian@example.net",role:"doctor",phone:"220-381-2191"},
+    {id:14,name:"Kevin Mills",email:"james53@example.com",role:"doctor",phone:"+1-647-451-0799"},
+    {id:15,name:"Shirley Suarez",email:"justin78@example.net",role:"doctor",phone:"+1-680-584-1241"},
+    {id:16,name:"Christina Walters",email:"william40@example.org",role:"doctor",phone:"300-352-4278"},
+    {id:17,name:"Melissa Hernandez",email:"davenportbrandi@example.org",role:"doctor",phone:"845-405-3315"},
+    {id:18,name:"Cynthia Martin",email:"nicolejohnson@example.net",role:"doctor",phone:"(534)221-6073"},
+    {id:19,name:"Jennifer Ramirez",email:"rasmussenjoshua@example.net",role:"doctor",phone:"+1-785-801-4294"},
+    {id:20,name:"Kayla Cruz",email:"jonathanfletcher@example.org",role:"doctor",phone:"+1-635-661-5951"},
+    {id:21,name:"Erika Terry",email:"jamesortega@example.com",role:"doctor",phone:"(599)846-8044"},
+    {id:22,name:"Lisa Morris",email:"nramos@example.net",role:"doctor",phone:"001-221-248-9513"},
+    {id:23,name:"John Atkinson",email:"gibsonolivia@example.net",role:"doctor",phone:"001-967-263-2016"},
+    {id:24,name:"Sylvia Martinez",email:"lauriecontreras@example.net",role:"doctor",phone:"001-979-586-8727"},
+    {id:25,name:"Billy Mitchell",email:"matthew81@example.org",role:"doctor",phone:"(823)216-6587"},
+    {id:26,name:"Pamela James",email:"benderkenneth@example.com",role:"doctor",phone:"(488)993-7346"},
+    {id:27,name:"Veronica Ferguson",email:"qvargas@example.org",role:"doctor",phone:"(827)620-4653"},
+    {id:28,name:"Julie Curry",email:"cookemichael@example.net",role:"doctor",phone:"+1-500-933-0923"},
+    {id:29,name:"Pamela Jackson",email:"stricklandfrank@example.com",role:"doctor",phone:"349-666-3193"},
+    {id:30,name:"Lindsay Martinez",email:"reedross@example.com",role:"doctor",phone:"+1-650-967-1657"},
+    {id:31,name:"Roger Vargas",email:"melissa14@example.com",role:"doctor",phone:"699-765-0752"},
+    {id:32,name:"Kyle Beard",email:"blackjames@example.org",role:"doctor",phone:"783-977-7014"},
+    {id:33,name:"Hailey Barajas",email:"michael74@example.com",role:"doctor",phone:"635-618-2337"},
+    {id:34,name:"Dr. Elizabeth Ward",email:"alexis82@example.com",role:"doctor",phone:"984-927-1094"},
+    {id:35,name:"Cody Williams",email:"ewilson@example.com",role:"doctor",phone:"001-802-529-4131"},
+    {id:36,name:"Jamie Kerr",email:"michelle64@example.net",role:"doctor",phone:"+1-213-834-1232"},
+    {id:37,name:"Kirk Carter",email:"keithcampbell@example.com",role:"doctor",phone:"649-436-1832"},
+    {id:38,name:"Christopher Parker",email:"scott74@example.net",role:"doctor",phone:"288-377-1906"},
+    {id:39,name:"Michael Valencia",email:"keyemily@example.com",role:"doctor",phone:"001-727-787-4296"},
+    {id:40,name:"Shannon Rivera",email:"zroberts@example.net",role:"doctor",phone:"954-851-6808"},
+    {id:41,name:"Joseph Dean",email:"wgarrett@example.org",role:"doctor",phone:"+1-424-677-1093"},
+    {id:42,name:"Kristen Davis",email:"murraydavid@example.org",role:"doctor",phone:"001-548-446-7737"},
+    {id:43,name:"Desiree Tyler",email:"ymorgan@example.net",role:"doctor",phone:"944-799-7278"},
+    {id:44,name:"Phillip Bennett",email:"molly39@example.com",role:"doctor",phone:"001-360-957-6627"},
+    {id:45,name:"Thomas Smith",email:"robertpena@example.org",role:"doctor",phone:"359-561-5865"},
+    {id:46,name:"Tammie Bright",email:"hamiltoncorey@example.net",role:"doctor",phone:"772-740-0504"},
+    {id:47,name:"David Jenkins",email:"georgemiller@example.com",role:"doctor",phone:"279-923-7474"},
+    {id:48,name:"Megan Moore",email:"llandry@example.com",role:"doctor",phone:"(647)243-6713"},
+    {id:49,name:"Mary Hill",email:"lozanojulie@example.com",role:"doctor",phone:"295-633-9421"},
+    {id:50,name:"Amanda Diaz",email:"christopherphillips@example.net",role:"doctor",phone:"928-658-8424"},
+    {id:51,name:"Gina Wilson",email:"taylortammy@example.net",role:"patient",phone:"(885)716-0481"},
+    {id:52,name:"David Johnson",email:"rose31@example.net",role:"patient",phone:"001-446-812-0047"},
+    {id:53,name:"Michael Paul",email:"umatthews@example.org",role:"patient",phone:"+1-317-796-4053"},
+    {id:54,name:"Vanessa Howard",email:"hhill@example.com",role:"patient",phone:"390-505-3293"},
+    {id:55,name:"Robin Hall",email:"kristinacarlson@example.com",role:"patient",phone:"(728)542-1020"},
+    {id:56,name:"Alexis Baker",email:"judyfox@example.net",role:"patient",phone:"958-291-7839"},
+    {id:57,name:"John Morales",email:"henryrenee@example.org",role:"patient",phone:"992-812-4998"},
+    {id:58,name:"Michael Farrell",email:"russellbeasley@example.com",role:"patient",phone:"366-315-6545"},
+    {id:59,name:"Brent Rodgers",email:"angelawillis@example.net",role:"patient",phone:"+1-416-956-0494"},
+    {id:60,name:"Brian Bruce",email:"danny49@example.org",role:"patient",phone:"+1-699-680-9402"},
+    {id:61,name:"Heather White",email:"ashleymorales@example.org",role:"patient",phone:"718-636-6752"},
+    {id:62,name:"Paula Bradley",email:"wareeric@example.net",role:"patient",phone:"547-367-9764"},
+    {id:63,name:"Brian Gregory",email:"trose@example.org",role:"patient",phone:"+1-900-834-3244"},
+    {id:64,name:"James Padilla",email:"charles06@example.org",role:"patient",phone:"859-269-6641"},
+    {id:65,name:"Carolyn Meza",email:"xcollier@example.org",role:"patient",phone:"736-596-8164"},
+    {id:66,name:"Christopher Dixon",email:"schmidtjames@example.com",role:"patient",phone:"+1-923-912-4329"},
+    {id:67,name:"Sonia Day",email:"michelle52@example.com",role:"patient",phone:"244-790-5814"},
+    {id:68,name:"Angela Lin",email:"gilbertwilliam@example.com",role:"patient",phone:"001-707-393-5978"},
+    {id:69,name:"Carrie Wright",email:"hritter@example.net",role:"patient",phone:"(854)666-5905"},
+    {id:70,name:"Samuel Brandt",email:"mathewaguilar@example.org",role:"patient",phone:"762-291-4865"},
+    {id:71,name:"Christopher Lewis",email:"ilee@example.org",role:"patient",phone:"888-480-5929"},
+    {id:72,name:"Ronald Wise",email:"jenniferwilliams@example.com",role:"patient",phone:"979-547-3834"},
+    {id:73,name:"Travis Joyce",email:"xhammond@example.com",role:"patient",phone:"(323)492-4075"},
+    {id:74,name:"Taylor Hernandez",email:"odavis@example.com",role:"patient",phone:"760-568-5361"},
+    {id:75,name:"Timothy Combs",email:"lacey20@example.com",role:"patient",phone:"827-379-0104"},
+    {id:76,name:"Cynthia Martinez",email:"robertbauer@example.com",role:"patient",phone:"598-808-9324"},
+    {id:77,name:"Michael Mills",email:"carlos88@example.net",role:"patient",phone:"380-767-0654"},
+    {id:78,name:"Harold Morgan",email:"mariacohen@example.net",role:"patient",phone:"(221)770-4303"},
+    {id:79,name:"Kaylee Hays",email:"wking@example.net",role:"patient",phone:"(905)941-5667"},
+    {id:80,name:"Robert Adams",email:"acostachristian@example.net",role:"patient",phone:"(984)851-1544"},
+    {id:81,name:"Jeremy West",email:"christina64@example.net",role:"patient",phone:"916-258-2029"},
+    {id:82,name:"David Brewer",email:"patrick90@example.net",role:"patient",phone:"555-371-9285"},
+    {id:83,name:"Cody Holmes",email:"greenjorge@example.com",role:"patient",phone:"+1-747-331-2172"},
+    {id:84,name:"Donna Evans",email:"jenniferho@example.net",role:"patient",phone:"(783)913-2370"},
+    {id:85,name:"Kristen Salazar",email:"jonesraymond@example.net",role:"patient",phone:"466-491-2517"},
+    {id:86,name:"Thomas Brown",email:"holmeskevin@example.org",role:"patient",phone:"001-335-484-1438"},
+    {id:87,name:"Lauren Jackson",email:"megan90@example.org",role:"patient",phone:"+1-594-839-6907"},
+    {id:88,name:"Benjamin Brown",email:"dperry@example.org",role:"patient",phone:"(355)756-2588"},
+    {id:89,name:"Bryan Cole",email:"colinroberts@example.com",role:"patient",phone:"(232)359-5327"},
+    {id:90,name:"Kathy Levy",email:"brandywilliams@example.com",role:"patient",phone:"+1-874-280-1624"},
+    {id:91,name:"Chloe Tran",email:"hughesshannon@example.net",role:"patient",phone:"+1-891-221-6558"},
+    {id:92,name:"Chad Cook",email:"jstone@example.net",role:"patient",phone:"(759)952-6949"},
+    {id:93,name:"Elizabeth Cabrera",email:"mark16@example.net",role:"patient",phone:"001-809-474-9930"},
+    {id:94,name:"Dana Armstrong",email:"leescott@example.com",role:"patient",phone:"001-936-889-7028"},
+    {id:95,name:"Christopher Barr",email:"amy49@example.com",role:"patient",phone:"748-943-4437"},
+    {id:96,name:"Timothy Pope",email:"keith98@example.com",role:"patient",phone:"(652)640-4157"},
+    {id:97,name:"Luis Matthews",email:"brentstein@example.org",role:"patient",phone:"416-857-1208"},
+    {id:98,name:"Shirley Alvarez",email:"katelynmitchell@example.com",role:"patient",phone:"001-219-238-0262"},
+    {id:99,name:"Lance Hebert",email:"justin88@example.com",role:"patient",phone:"(687)443-1527"},
+    {id:100,name:"George Phillips",email:"gregorychase@example.com",role:"patient",phone:"951-661-2275"},
+    {id:101,name:"Elizabeth Sharp",email:"greenmichael@example.org",role:"patient",phone:"774-526-8414"},
+    {id:102,name:"Casey Hernandez",email:"robert87@example.net",role:"patient",phone:"339-218-7851"},
+    {id:103,name:"Stephanie Harris",email:"franklinbond@example.com",role:"patient",phone:"897-918-7072"},
+    {id:104,name:"Kristin Chambers",email:"jennifer64@example.org",role:"patient",phone:"001-910-265-1801"},
+    {id:105,name:"Christopher Taylor",email:"ybrooks@example.com",role:"patient",phone:"(261)282-5128"},
+    {id:106,name:"Julie Ball",email:"opatel@example.org",role:"admin",phone:"(543)310-6903"},
+    {id:107,name:"Andrew Harper",email:"sanchezbradley@example.com",role:"admin",phone:"702-584-3959"},
+    {id:108,name:"Charles Keller",email:"roberthill@example.net",role:"admin",phone:"001-626-887-0568"},
+    {id:109,name:"Joshua Allen",email:"kevinzimmerman@example.com",role:"admin",phone:"+1-566-788-2634"},
+    {id:110,name:"Tammy Boone",email:"nicholsmaria@example.org",role:"admin",phone:"+1-599-501-3983"},
   ],
   doctors:[
-    {id:1,userId:1,specialization:"Cardiology",licenseNo:"PMC-11001",availStart:"08:00",availEnd:"17:00"},
-    {id:2,userId:2,specialization:"Neurology",licenseNo:"PMC-11002",availStart:"09:00",availEnd:"18:00"},
-    {id:3,userId:3,specialization:"General Practice",licenseNo:"PMC-11003",availStart:"08:00",availEnd:"16:00"},
+    {id:1,userId:1,specialization:"Neurology",licenseNo:"PMC-13278",availStart:"08:00",availEnd:"17:00"},
+    {id:2,userId:2,specialization:"Dermatology",licenseNo:"PMC-42098",availStart:"08:00",availEnd:"17:00"},
+    {id:3,userId:3,specialization:"Pediatrics",licenseNo:"PMC-28289",availStart:"08:00",availEnd:"17:00"},
+    {id:4,userId:4,specialization:"Neurology",licenseNo:"PMC-98696",availStart:"08:00",availEnd:"17:00"},
+    {id:5,userId:5,specialization:"Ophthalmology",licenseNo:"PMC-21395",availStart:"08:00",availEnd:"17:00"},
+    {id:6,userId:6,specialization:"Psychiatry",licenseNo:"PMC-65302",availStart:"08:00",availEnd:"17:00"},
+    {id:7,userId:7,specialization:"Cardiology",licenseNo:"PMC-13905",availStart:"08:00",availEnd:"17:00"},
+    {id:8,userId:8,specialization:"Neurology",licenseNo:"PMC-38657",availStart:"08:00",availEnd:"17:00"},
+    {id:9,userId:9,specialization:"Pediatrics",licenseNo:"PMC-76237",availStart:"08:00",availEnd:"17:00"},
+    {id:10,userId:10,specialization:"Psychiatry",licenseNo:"PMC-13478",availStart:"08:00",availEnd:"17:00"},
+    {id:11,userId:11,specialization:"Ophthalmology",licenseNo:"PMC-36062",availStart:"08:00",availEnd:"17:00"},
+    {id:12,userId:12,specialization:"Ophthalmology",licenseNo:"PMC-64987",availStart:"08:00",availEnd:"17:00"},
+    {id:13,userId:13,specialization:"Pediatrics",licenseNo:"PMC-68878",availStart:"08:00",availEnd:"17:00"},
+    {id:14,userId:14,specialization:"Psychiatry",licenseNo:"PMC-46463",availStart:"08:00",availEnd:"17:00"},
+    {id:15,userId:15,specialization:"Cardiology",licenseNo:"PMC-30926",availStart:"08:00",availEnd:"17:00"},
+    {id:16,userId:16,specialization:"Gynecology",licenseNo:"PMC-54597",availStart:"08:00",availEnd:"17:00"},
+    {id:17,userId:17,specialization:"Dermatology",licenseNo:"PMC-30379",availStart:"08:00",availEnd:"17:00"},
+    {id:18,userId:18,specialization:"Pediatrics",licenseNo:"PMC-54118",availStart:"08:00",availEnd:"17:00"},
+    {id:19,userId:19,specialization:"Neurology",licenseNo:"PMC-22156",availStart:"08:00",availEnd:"17:00"},
+    {id:20,userId:20,specialization:"Gynecology",licenseNo:"PMC-22676",availStart:"08:00",availEnd:"17:00"},
+    {id:21,userId:21,specialization:"General Practice",licenseNo:"PMC-55082",availStart:"08:00",availEnd:"17:00"},
+    {id:22,userId:22,specialization:"Psychiatry",licenseNo:"PMC-44671",availStart:"08:00",availEnd:"17:00"},
+    {id:23,userId:23,specialization:"Cardiology",licenseNo:"PMC-70217",availStart:"08:00",availEnd:"17:00"},
+    {id:24,userId:24,specialization:"Ophthalmology",licenseNo:"PMC-26361",availStart:"08:00",availEnd:"17:00"},
+    {id:25,userId:25,specialization:"Gynecology",licenseNo:"PMC-20328",availStart:"08:00",availEnd:"17:00"},
+    {id:26,userId:26,specialization:"Ophthalmology",licenseNo:"PMC-48427",availStart:"08:00",availEnd:"17:00"},
+    {id:27,userId:27,specialization:"Psychiatry",licenseNo:"PMC-57400",availStart:"08:00",availEnd:"17:00"},
+    {id:28,userId:28,specialization:"Psychiatry",licenseNo:"PMC-35203",availStart:"08:00",availEnd:"17:00"},
+    {id:29,userId:29,specialization:"Neurology",licenseNo:"PMC-16006",availStart:"08:00",availEnd:"17:00"},
+    {id:30,userId:30,specialization:"Pediatrics",licenseNo:"PMC-47930",availStart:"08:00",availEnd:"17:00"},
+    {id:31,userId:31,specialization:"Neurology",licenseNo:"PMC-40512",availStart:"08:00",availEnd:"17:00"},
+    {id:32,userId:32,specialization:"Neurology",licenseNo:"PMC-59823",availStart:"08:00",availEnd:"17:00"},
+    {id:33,userId:33,specialization:"Dermatology",licenseNo:"PMC-69429",availStart:"08:00",availEnd:"17:00"},
+    {id:34,userId:34,specialization:"General Practice",licenseNo:"PMC-31319",availStart:"08:00",availEnd:"17:00"},
+    {id:35,userId:35,specialization:"General Practice",licenseNo:"PMC-56566",availStart:"08:00",availEnd:"17:00"},
+    {id:36,userId:36,specialization:"Pediatrics",licenseNo:"PMC-97841",availStart:"08:00",availEnd:"17:00"},
+    {id:37,userId:37,specialization:"Dermatology",licenseNo:"PMC-99593",availStart:"08:00",availEnd:"17:00"},
+    {id:38,userId:38,specialization:"Neurology",licenseNo:"PMC-89840",availStart:"08:00",availEnd:"17:00"},
+    {id:39,userId:39,specialization:"Orthopedics",licenseNo:"PMC-80010",availStart:"08:00",availEnd:"17:00"},
+    {id:40,userId:40,specialization:"Pediatrics",licenseNo:"PMC-31417",availStart:"08:00",availEnd:"17:00"},
+    {id:41,userId:41,specialization:"ENT",licenseNo:"PMC-59735",availStart:"08:00",availEnd:"17:00"},
+    {id:42,userId:42,specialization:"Dermatology",licenseNo:"PMC-93886",availStart:"08:00",availEnd:"17:00"},
+    {id:43,userId:43,specialization:"Ophthalmology",licenseNo:"PMC-38785",availStart:"08:00",availEnd:"17:00"},
+    {id:44,userId:44,specialization:"General Practice",licenseNo:"PMC-17331",availStart:"08:00",availEnd:"17:00"},
+    {id:45,userId:45,specialization:"Pediatrics",licenseNo:"PMC-14207",availStart:"08:00",availEnd:"17:00"},
+    {id:46,userId:46,specialization:"General Practice",licenseNo:"PMC-62581",availStart:"08:00",availEnd:"17:00"},
+    {id:47,userId:47,specialization:"Dermatology",licenseNo:"PMC-18675",availStart:"08:00",availEnd:"17:00"},
+    {id:48,userId:48,specialization:"Pediatrics",licenseNo:"PMC-84341",availStart:"08:00",availEnd:"17:00"},
+    {id:49,userId:49,specialization:"General Practice",licenseNo:"PMC-37869",availStart:"08:00",availEnd:"17:00"},
+    {id:50,userId:50,specialization:"ENT",licenseNo:"PMC-61856",availStart:"08:00",availEnd:"17:00"},
   ],
   patients:[
-    {id:1,userId:4,dob:"1990-04-15",bloodGroup:"O+",medHistory:"No significant history"},
-    {id:2,userId:5,dob:"1985-09-22",bloodGroup:"A+",medHistory:"Hypertension, controlled"},
-    {id:3,userId:6,dob:"1978-12-01",bloodGroup:"B+",medHistory:"Type 2 diabetes since 2018"},
-    {id:4,userId:7,dob:"1995-03-08",bloodGroup:"AB+",medHistory:"Seasonal allergies"},
+    {id:1,userId:51,dob:"1952-11-03",bloodGroup:"O-",medHistory:"Type 2 diabetes since 2018"},
+    {id:2,userId:52,dob:"1962-08-20",bloodGroup:"AB+",medHistory:"Type 2 diabetes since 2018"},
+    {id:3,userId:53,dob:"2000-09-22",bloodGroup:"B-",medHistory:"Anxiety disorder, managed"},
+    {id:4,userId:54,dob:"2001-11-07",bloodGroup:"AB+",medHistory:"No known allergies or conditions"},
+    {id:5,userId:55,dob:"1977-12-14",bloodGroup:"O+",medHistory:"No known allergies or conditions"},
+    {id:6,userId:56,dob:"1953-01-27",bloodGroup:"O+",medHistory:"Chronic lower back pain"},
+    {id:7,userId:57,dob:"1954-09-08",bloodGroup:"B-",medHistory:"Type 2 diabetes since 2018"},
+    {id:8,userId:58,dob:"2004-01-22",bloodGroup:"O-",medHistory:"Hypertension, controlled with medication"},
+    {id:9,userId:59,dob:"2002-07-14",bloodGroup:"A+",medHistory:"Hypertension, controlled with medication"},
+    {id:10,userId:60,dob:"1983-01-21",bloodGroup:"B+",medHistory:"Type 2 diabetes since 2018"},
+    {id:11,userId:61,dob:"1952-04-13",bloodGroup:"O+",medHistory:"No known allergies or conditions"},
+    {id:12,userId:62,dob:"2004-03-29",bloodGroup:"A-",medHistory:"Seasonal allergies"},
+    {id:13,userId:63,dob:"1968-08-12",bloodGroup:"O+",medHistory:"No known allergies or conditions"},
+    {id:14,userId:64,dob:"2006-02-20",bloodGroup:"O-",medHistory:"Anxiety disorder, managed"},
+    {id:15,userId:65,dob:"1984-06-03",bloodGroup:"AB+",medHistory:"Anxiety disorder, managed"},
+    {id:16,userId:66,dob:"1994-01-02",bloodGroup:"A+",medHistory:"Hypertension, controlled with medication"},
+    {id:17,userId:67,dob:"1991-09-17",bloodGroup:"AB+",medHistory:"Chronic lower back pain"},
+    {id:18,userId:68,dob:"1973-06-22",bloodGroup:"A-",medHistory:"Previous appendectomy 2015"},
+    {id:19,userId:69,dob:"1954-11-01",bloodGroup:"O+",medHistory:"Type 2 diabetes since 2018"},
+    {id:20,userId:70,dob:"1959-10-18",bloodGroup:"O-",medHistory:"No significant medical history"},
+    {id:21,userId:71,dob:"1964-04-27",bloodGroup:"AB+",medHistory:"Anxiety disorder, managed"},
+    {id:22,userId:72,dob:"1998-10-14",bloodGroup:"B+",medHistory:"Anxiety disorder, managed"},
+    {id:23,userId:73,dob:"1972-12-11",bloodGroup:"A-",medHistory:"Previous appendectomy 2015"},
+    {id:24,userId:74,dob:"2002-05-16",bloodGroup:"B-",medHistory:"Type 2 diabetes since 2018"},
+    {id:25,userId:75,dob:"1969-08-12",bloodGroup:"AB-",medHistory:"Type 2 diabetes since 2018"},
+    {id:26,userId:76,dob:"1994-03-14",bloodGroup:"A+",medHistory:"No known allergies or conditions"},
+    {id:27,userId:77,dob:"1958-06-28",bloodGroup:"AB-",medHistory:"Hypothyroidism, on levothyroxine"},
+    {id:28,userId:78,dob:"2007-09-15",bloodGroup:"A+",medHistory:"Hypertension, controlled with medication"},
+    {id:29,userId:79,dob:"1992-05-17",bloodGroup:"AB-",medHistory:"Previous appendectomy 2015"},
+    {id:30,userId:80,dob:"1979-06-03",bloodGroup:"B-",medHistory:"No significant medical history"},
+    {id:31,userId:81,dob:"2006-11-20",bloodGroup:"B-",medHistory:"No known allergies or conditions"},
+    {id:32,userId:82,dob:"1953-06-27",bloodGroup:"A-",medHistory:"Hypertension, controlled with medication"},
+    {id:33,userId:83,dob:"1975-09-22",bloodGroup:"O-",medHistory:"Hypertension, controlled with medication"},
+    {id:34,userId:84,dob:"1999-01-07",bloodGroup:"B+",medHistory:"Type 2 diabetes since 2018"},
+    {id:35,userId:85,dob:"1970-02-16",bloodGroup:"O-",medHistory:"Anxiety disorder, managed"},
+    {id:36,userId:86,dob:"1994-12-23",bloodGroup:"B+",medHistory:"Previous appendectomy 2015"},
+    {id:37,userId:87,dob:"2005-10-03",bloodGroup:"O+",medHistory:"Asthma, uses inhaler as needed"},
+    {id:38,userId:88,dob:"1973-05-20",bloodGroup:"B-",medHistory:"Previous appendectomy 2015"},
+    {id:39,userId:89,dob:"1995-03-29",bloodGroup:"O+",medHistory:"Chronic lower back pain"},
+    {id:40,userId:90,dob:"1952-02-03",bloodGroup:"O-",medHistory:"Anxiety disorder, managed"},
+    {id:41,userId:91,dob:"1966-03-24",bloodGroup:"O-",medHistory:"Hypertension, controlled with medication"},
+    {id:42,userId:92,dob:"2007-12-11",bloodGroup:"B-",medHistory:"Asthma, uses inhaler as needed"},
+    {id:43,userId:93,dob:"1978-10-30",bloodGroup:"A-",medHistory:"Chronic lower back pain"},
+    {id:44,userId:94,dob:"1971-01-04",bloodGroup:"A+",medHistory:"No known allergies or conditions"},
+    {id:45,userId:95,dob:"2004-12-17",bloodGroup:"B-",medHistory:"No known allergies or conditions"},
+    {id:46,userId:96,dob:"1975-06-03",bloodGroup:"B-",medHistory:"No significant medical history"},
+    {id:47,userId:97,dob:"1989-10-18",bloodGroup:"A-",medHistory:"No significant medical history"},
+    {id:48,userId:98,dob:"1988-09-10",bloodGroup:"B-",medHistory:"Hypertension, controlled with medication"},
+    {id:49,userId:99,dob:"1955-05-06",bloodGroup:"A+",medHistory:"Chronic lower back pain"},
+    {id:50,userId:100,dob:"1986-04-03",bloodGroup:"A-",medHistory:"Anxiety disorder, managed"},
+    {id:51,userId:101,dob:"1996-08-29",bloodGroup:"B-",medHistory:"Previous appendectomy 2015"},
+    {id:52,userId:102,dob:"1991-09-26",bloodGroup:"O-",medHistory:"Asthma, uses inhaler as needed"},
+    {id:53,userId:103,dob:"1955-02-17",bloodGroup:"B+",medHistory:"No known allergies or conditions"},
+    {id:54,userId:104,dob:"1959-04-27",bloodGroup:"O-",medHistory:"Asthma, uses inhaler as needed"},
+    {id:55,userId:105,dob:"1991-08-26",bloodGroup:"O-",medHistory:"Seasonal allergies"},
   ],
   appointments:[
-    {id:1,patientId:1,doctorId:1,scheduledAt:"2025-05-20 10:00:00",status:"completed",notes:"Chest pain follow-up"},
-    {id:2,patientId:2,doctorId:2,scheduledAt:"2025-05-21 11:00:00",status:"confirmed",notes:"Headache evaluation"},
-    {id:3,patientId:3,doctorId:3,scheduledAt:"2025-05-21 14:00:00",status:"pending",notes:"Diabetes check"},
-    {id:4,patientId:4,doctorId:1,scheduledAt:"2025-05-22 09:00:00",status:"pending",notes:"Allergy review"},
+    {id:1,patientId:7,doctorId:13,scheduledAt:"2026-01-03 23:00:00",status:"completed",notes:"First blood accept final growth especially."},
+    {id:2,patientId:28,doctorId:43,scheduledAt:"2025-07-04 20:00:00",status:"completed",notes:"Issue news mention billion."},
+    {id:3,patientId:27,doctorId:28,scheduledAt:"2025-06-19 04:00:00",status:"confirmed",notes:"Behavior our foot history factor hold be."},
+    {id:4,patientId:4,doctorId:47,scheduledAt:"2026-04-11 14:00:00",status:"cancelled",notes:"Occur college herself catch feeling."},
+    {id:5,patientId:42,doctorId:42,scheduledAt:"2025-11-13 13:00:00",status:"completed",notes:"Cold every feel site."},
+    {id:6,patientId:26,doctorId:4,scheduledAt:"2025-09-26 08:00:00",status:"cancelled",notes:"Result many pattern leader career."},
+    {id:7,patientId:52,doctorId:22,scheduledAt:"2025-05-19 22:00:00",status:"completed",notes:"Forward per sound forget friend spring."},
+    {id:8,patientId:13,doctorId:16,scheduledAt:"2026-03-27 09:00:00",status:"completed",notes:"Carry fly water cut fire who why fact."},
+    {id:9,patientId:29,doctorId:35,scheduledAt:"2026-01-26 06:00:00",status:"completed",notes:"Whose site for exactly skill half usually."},
+    {id:10,patientId:12,doctorId:28,scheduledAt:"2025-07-29 10:00:00",status:"completed",notes:"Conference should agree road wall decide something."},
+    {id:11,patientId:16,doctorId:30,scheduledAt:"2026-03-17 01:00:00",status:"completed",notes:"Standard somebody important material."},
+    {id:12,patientId:52,doctorId:29,scheduledAt:"2026-01-03 18:00:00",status:"pending",notes:"Education child institution help last."},
+    {id:13,patientId:4,doctorId:7,scheduledAt:"2025-12-21 20:00:00",status:"cancelled",notes:"Husband media turn reality myself so growth time."},
+    {id:14,patientId:54,doctorId:35,scheduledAt:"2025-11-29 13:00:00",status:"completed",notes:"Body eat professor coach."},
+    {id:15,patientId:49,doctorId:6,scheduledAt:"2025-12-27 05:00:00",status:"completed",notes:"Worker quality hundred sell whole involve action."},
+    {id:16,patientId:27,doctorId:11,scheduledAt:"2025-08-19 23:00:00",status:"confirmed",notes:"Section newspaper reach determine hear leg quickly."},
+    {id:17,patientId:14,doctorId:31,scheduledAt:"2026-01-24 15:00:00",status:"confirmed",notes:"General agency bit indeed."},
+    {id:18,patientId:11,doctorId:4,scheduledAt:"2026-05-03 17:00:00",status:"confirmed",notes:"Story role give gas."},
+    {id:19,patientId:25,doctorId:1,scheduledAt:"2026-02-27 21:00:00",status:"completed",notes:"Lot live just recent five feel special."},
+    {id:20,patientId:19,doctorId:30,scheduledAt:"2025-06-28 11:00:00",status:"confirmed",notes:"Possible quality clearly worker during company."},
+    {id:21,patientId:47,doctorId:45,scheduledAt:"2025-07-14 22:00:00",status:"pending",notes:"Interview left something picture control price how."},
+    {id:22,patientId:46,doctorId:43,scheduledAt:"2026-02-10 18:00:00",status:"confirmed",notes:"Last involve above Democrat everything."},
+    {id:23,patientId:13,doctorId:10,scheduledAt:"2026-01-29 12:00:00",status:"completed",notes:"Officer son Mr hand."},
+    {id:24,patientId:4,doctorId:14,scheduledAt:"2025-07-28 10:00:00",status:"pending",notes:"Energy television month police."},
+    {id:25,patientId:35,doctorId:48,scheduledAt:"2025-12-21 12:00:00",status:"completed",notes:"Hotel box goal leader common purpose song try."},
+    {id:26,patientId:21,doctorId:48,scheduledAt:"2025-12-19 00:00:00",status:"completed",notes:"Finish draw bring health."},
+    {id:27,patientId:38,doctorId:4,scheduledAt:"2025-07-08 02:00:00",status:"confirmed",notes:"Industry case himself control player really."},
+    {id:28,patientId:55,doctorId:33,scheduledAt:"2026-01-08 03:00:00",status:"pending",notes:"Never majority cell fire."},
+    {id:29,patientId:4,doctorId:11,scheduledAt:"2025-10-29 04:00:00",status:"pending",notes:"Tend weight machine."},
+    {id:30,patientId:55,doctorId:6,scheduledAt:"2025-07-27 17:00:00",status:"completed",notes:"White measure manager range indeed style."},
+    {id:31,patientId:39,doctorId:5,scheduledAt:"2025-11-11 22:00:00",status:"completed",notes:"Not somebody determine allow."},
+    {id:32,patientId:16,doctorId:44,scheduledAt:"2025-08-07 14:00:00",status:"confirmed",notes:"Collection leader score she near."},
+    {id:33,patientId:37,doctorId:8,scheduledAt:"2025-06-27 19:00:00",status:"completed",notes:"Environmental myself yard my."},
+    {id:34,patientId:39,doctorId:38,scheduledAt:"2026-02-17 20:00:00",status:"completed",notes:"National wrong bill stop seem fear."},
+    {id:35,patientId:6,doctorId:40,scheduledAt:"2026-05-17 10:00:00",status:"confirmed",notes:"Enjoy television beautiful tend bring speech decide."},
+    {id:36,patientId:38,doctorId:43,scheduledAt:"2026-02-10 20:00:00",status:"pending",notes:"Technology particular into pattern size spend."},
+    {id:37,patientId:21,doctorId:34,scheduledAt:"2026-03-07 15:00:00",status:"completed",notes:"Go exactly much food region eye environment."},
+    {id:38,patientId:43,doctorId:14,scheduledAt:"2026-03-26 20:00:00",status:"cancelled",notes:"Career seek in arrive."},
+    {id:39,patientId:16,doctorId:21,scheduledAt:"2025-08-26 18:00:00",status:"completed",notes:"Reduce car chair focus."},
+    {id:40,patientId:9,doctorId:26,scheduledAt:"2025-08-15 21:00:00",status:"cancelled",notes:"Majority officer environmental increase later plant."},
+    {id:41,patientId:20,doctorId:42,scheduledAt:"2026-04-03 22:00:00",status:"confirmed",notes:"Idea seek reason theory."},
+    {id:42,patientId:49,doctorId:21,scheduledAt:"2025-10-30 12:00:00",status:"completed",notes:"Force able similar run room learn professional."},
+    {id:43,patientId:30,doctorId:1,scheduledAt:"2025-09-25 07:00:00",status:"pending",notes:"Somebody huge why station."},
+    {id:44,patientId:7,doctorId:37,scheduledAt:"2025-11-14 03:00:00",status:"completed",notes:"Stock front official not magazine gas."},
+    {id:45,patientId:14,doctorId:35,scheduledAt:"2026-01-21 18:00:00",status:"pending",notes:"Animal phone student."},
+    {id:46,patientId:9,doctorId:17,scheduledAt:"2025-05-23 09:00:00",status:"completed",notes:"Kid a when dark."},
+    {id:47,patientId:16,doctorId:5,scheduledAt:"2026-01-23 23:00:00",status:"completed",notes:"Think few themselves theory."},
+    {id:48,patientId:11,doctorId:19,scheduledAt:"2025-06-20 13:00:00",status:"confirmed",notes:"Economy head tough close how figure."},
+    {id:49,patientId:46,doctorId:35,scheduledAt:"2026-01-27 22:00:00",status:"completed",notes:"Investment before believe degree back."},
+    {id:50,patientId:52,doctorId:40,scheduledAt:"2025-12-20 07:00:00",status:"cancelled",notes:"Quite act receive stage write institution car."},
+    {id:51,patientId:1,doctorId:34,scheduledAt:"2025-06-12 08:00:00",status:"cancelled",notes:"Become south billion happen federal him."},
+    {id:52,patientId:20,doctorId:36,scheduledAt:"2026-03-10 12:00:00",status:"cancelled",notes:"Political quality attention none."},
+    {id:53,patientId:9,doctorId:7,scheduledAt:"2025-12-26 09:00:00",status:"completed",notes:"Key reveal physical character."},
+    {id:54,patientId:7,doctorId:8,scheduledAt:"2025-10-14 20:00:00",status:"cancelled",notes:"Team beautiful beyond sell operation himself."},
+    {id:55,patientId:10,doctorId:36,scheduledAt:"2026-05-04 06:00:00",status:"completed",notes:"Social easy popular easy over return."},
+    {id:56,patientId:39,doctorId:19,scheduledAt:"2025-08-29 12:00:00",status:"completed",notes:"Summer probably feeling."},
+    {id:57,patientId:22,doctorId:46,scheduledAt:"2025-11-22 13:00:00",status:"completed",notes:"Country hot position six soldier dream history."},
+    {id:58,patientId:41,doctorId:44,scheduledAt:"2025-08-13 12:00:00",status:"completed",notes:"Audience thousand activity guess first hit stuff inside."},
+    {id:59,patientId:32,doctorId:33,scheduledAt:"2025-12-03 00:00:00",status:"completed",notes:"Several west side admit."},
+    {id:60,patientId:6,doctorId:4,scheduledAt:"2025-06-11 03:00:00",status:"cancelled",notes:"Democratic two we huge expert."},
+    {id:61,patientId:54,doctorId:28,scheduledAt:"2026-02-01 17:00:00",status:"completed",notes:"Interest I policy Mrs check base."},
+    {id:62,patientId:1,doctorId:3,scheduledAt:"2025-06-15 07:00:00",status:"completed",notes:"Window choice force only shake."},
+    {id:63,patientId:9,doctorId:50,scheduledAt:"2026-01-09 19:00:00",status:"cancelled",notes:"Financial join well draw."},
+    {id:64,patientId:11,doctorId:17,scheduledAt:"2025-08-14 18:00:00",status:"cancelled",notes:"Break partner area program price compare."},
+    {id:65,patientId:36,doctorId:29,scheduledAt:"2025-05-22 02:00:00",status:"cancelled",notes:"Reduce clearly well mission."},
+    {id:66,patientId:36,doctorId:28,scheduledAt:"2026-02-27 10:00:00",status:"completed",notes:"Cold camera sit environmental though."},
+    {id:67,patientId:5,doctorId:8,scheduledAt:"2026-02-23 05:00:00",status:"cancelled",notes:"Friend investment model."},
+    {id:68,patientId:35,doctorId:10,scheduledAt:"2025-08-21 12:00:00",status:"completed",notes:"Physical many member area teacher cold church."},
+    {id:69,patientId:38,doctorId:24,scheduledAt:"2026-02-23 21:00:00",status:"pending",notes:"Purpose boy scientist able teach activity animal."},
+    {id:70,patientId:28,doctorId:10,scheduledAt:"2025-09-27 09:00:00",status:"completed",notes:"Condition whether along sort."},
+    {id:71,patientId:20,doctorId:3,scheduledAt:"2026-02-02 06:00:00",status:"completed",notes:"Different eat trouble floor step number."},
+    {id:72,patientId:23,doctorId:3,scheduledAt:"2025-06-30 01:00:00",status:"completed",notes:"Conference source wonder."},
+    {id:73,patientId:16,doctorId:44,scheduledAt:"2026-04-30 22:00:00",status:"cancelled",notes:"Theory tend similar financial."},
+    {id:74,patientId:23,doctorId:7,scheduledAt:"2025-06-18 00:00:00",status:"pending",notes:"Account customer nor fight performance less option."},
+    {id:75,patientId:40,doctorId:27,scheduledAt:"2025-11-13 15:00:00",status:"cancelled",notes:"Run national somebody character usually."},
+    {id:76,patientId:16,doctorId:10,scheduledAt:"2025-05-26 04:00:00",status:"completed",notes:"Get style theory week ability price support."},
+    {id:77,patientId:27,doctorId:12,scheduledAt:"2026-02-07 01:00:00",status:"completed",notes:"Day work information which."},
+    {id:78,patientId:48,doctorId:12,scheduledAt:"2026-05-07 16:00:00",status:"completed",notes:"Republican behavior TV today."},
+    {id:79,patientId:52,doctorId:27,scheduledAt:"2025-11-23 07:00:00",status:"cancelled",notes:"Learn security oil measure PM hour."},
+    {id:80,patientId:52,doctorId:48,scheduledAt:"2025-12-19 15:00:00",status:"completed",notes:"Itself who door end."},
+    {id:81,patientId:11,doctorId:18,scheduledAt:"2025-09-09 12:00:00",status:"cancelled",notes:"Red save fish evening avoid dark."},
+    {id:82,patientId:25,doctorId:7,scheduledAt:"2026-02-26 07:00:00",status:"completed",notes:"Board black last finish building group show later."},
+    {id:83,patientId:15,doctorId:31,scheduledAt:"2025-11-02 16:00:00",status:"completed",notes:"Bed space fight relate."},
+    {id:84,patientId:23,doctorId:30,scheduledAt:"2025-12-23 19:00:00",status:"completed",notes:"Structure foreign before eat green."},
+    {id:85,patientId:15,doctorId:15,scheduledAt:"2025-11-21 00:00:00",status:"completed",notes:"Employee wrong all identify laugh."},
+    {id:86,patientId:13,doctorId:43,scheduledAt:"2026-02-14 16:00:00",status:"confirmed",notes:"Behind big soldier building article."},
+    {id:87,patientId:18,doctorId:22,scheduledAt:"2026-02-26 16:00:00",status:"completed",notes:"Candidate statement head piece popular."},
+    {id:88,patientId:18,doctorId:50,scheduledAt:"2025-12-16 03:00:00",status:"completed",notes:"True avoid young cup position."},
+    {id:89,patientId:33,doctorId:42,scheduledAt:"2026-03-09 01:00:00",status:"confirmed",notes:"Toward stop former amount."},
+    {id:90,patientId:54,doctorId:44,scheduledAt:"2025-11-01 20:00:00",status:"pending",notes:"Under item right many."},
+    {id:91,patientId:2,doctorId:22,scheduledAt:"2025-10-04 06:00:00",status:"completed",notes:"Common Democrat cost evidence third alone."},
+    {id:92,patientId:12,doctorId:17,scheduledAt:"2025-12-29 14:00:00",status:"pending",notes:"Positive material third look because."},
+    {id:93,patientId:3,doctorId:17,scheduledAt:"2025-10-04 08:00:00",status:"completed",notes:"Current this moment piece soon some."},
+    {id:94,patientId:28,doctorId:39,scheduledAt:"2026-05-13 20:00:00",status:"completed",notes:"Look sit general not focus establish."},
+    {id:95,patientId:51,doctorId:47,scheduledAt:"2025-05-26 23:00:00",status:"completed",notes:"Despite time sing around yard morning short yourself."},
+    {id:96,patientId:39,doctorId:28,scheduledAt:"2026-05-08 04:00:00",status:"pending",notes:"Easy drop move social."},
+    {id:97,patientId:25,doctorId:8,scheduledAt:"2026-02-10 16:00:00",status:"pending",notes:"Offer work home very yard."},
+    {id:98,patientId:17,doctorId:13,scheduledAt:"2025-07-19 21:00:00",status:"completed",notes:"Or south recently trial agreement."},
+    {id:99,patientId:28,doctorId:46,scheduledAt:"2026-01-28 08:00:00",status:"completed",notes:"Nor none could write think man finally."},
+    {id:100,patientId:52,doctorId:34,scheduledAt:"2025-11-12 14:00:00",status:"pending",notes:"Argue own after long."},
+    {id:101,patientId:21,doctorId:17,scheduledAt:"2024-04-11 11:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:102,patientId:53,doctorId:13,scheduledAt:"2024-02-28 12:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:103,patientId:36,doctorId:31,scheduledAt:"2024-11-09 11:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:104,patientId:36,doctorId:10,scheduledAt:"2024-11-18 16:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:105,patientId:55,doctorId:1,scheduledAt:"2024-05-23 08:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:106,patientId:12,doctorId:32,scheduledAt:"2024-04-07 16:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:107,patientId:12,doctorId:25,scheduledAt:"2024-06-18 13:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:108,patientId:6,doctorId:8,scheduledAt:"2024-10-09 12:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:109,patientId:31,doctorId:35,scheduledAt:"2024-04-14 11:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:110,patientId:5,doctorId:13,scheduledAt:"2024-02-11 11:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:111,patientId:36,doctorId:45,scheduledAt:"2024-08-12 16:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:112,patientId:7,doctorId:5,scheduledAt:"2024-12-28 11:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:113,patientId:22,doctorId:48,scheduledAt:"2024-02-14 09:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:114,patientId:30,doctorId:37,scheduledAt:"2024-02-10 16:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:115,patientId:18,doctorId:7,scheduledAt:"2024-08-15 16:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:116,patientId:23,doctorId:8,scheduledAt:"2024-09-28 08:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:117,patientId:26,doctorId:50,scheduledAt:"2024-10-25 16:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:118,patientId:15,doctorId:16,scheduledAt:"2024-10-20 15:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:119,patientId:48,doctorId:26,scheduledAt:"2024-03-11 14:00:00",status:"completed",notes:"Follow-up visit"},
+    {id:120,patientId:3,doctorId:1,scheduledAt:"2024-01-27 15:00:00",status:"completed",notes:"Follow-up visit"},
   ],
   prescriptions:[
-    {id:1,appointmentId:1,doctorId:1,patientId:1,medicineId:5,dosage:"10mg",frequency:"Once daily",durationDays:30,issuedDate:"2025-05-20",diagnosis:"Hypertensive episode"},
+    {id:1,appointmentId:1,doctorId:13,patientId:7,medicineId:41,dosage:"250mg",frequency:"Three times daily",durationDays:27,issuedDate:"2026-01-03",diagnosis:"Lower back pain"},
+    {id:2,appointmentId:2,doctorId:43,patientId:28,medicineId:8,dosage:"10mg",frequency:"As needed",durationDays:21,issuedDate:"2025-07-04",diagnosis:"Anxiety and stress"},
+    {id:3,appointmentId:5,doctorId:42,patientId:42,medicineId:4,dosage:"100mg",frequency:"Once daily",durationDays:7,issuedDate:"2025-11-13",diagnosis:"GERD"},
+    {id:4,appointmentId:7,doctorId:22,patientId:52,medicineId:34,dosage:"500mg",frequency:"Once daily",durationDays:29,issuedDate:"2025-05-19",diagnosis:"Anxiety and stress"},
+    {id:5,appointmentId:8,doctorId:16,patientId:13,medicineId:59,dosage:"20mg",frequency:"Every 8 hours",durationDays:21,issuedDate:"2026-03-27",diagnosis:"Acute upper respiratory infection"},
+    {id:6,appointmentId:9,doctorId:35,patientId:29,medicineId:4,dosage:"100mg",frequency:"Twice daily",durationDays:27,issuedDate:"2026-01-26",diagnosis:"Acute upper respiratory infection"},
+    {id:7,appointmentId:10,doctorId:28,patientId:12,medicineId:45,dosage:"250mg",frequency:"Twice daily",durationDays:5,issuedDate:"2025-07-29",diagnosis:"Anxiety and stress"},
+    {id:8,appointmentId:11,doctorId:30,patientId:16,medicineId:8,dosage:"40mg",frequency:"Every 8 hours",durationDays:6,issuedDate:"2026-03-17",diagnosis:"Type 2 diabetes follow-up"},
+    {id:9,appointmentId:14,doctorId:35,patientId:54,medicineId:16,dosage:"10mg",frequency:"Twice daily",durationDays:27,issuedDate:"2025-11-29",diagnosis:"Hypertensive episode"},
+    {id:10,appointmentId:15,doctorId:6,patientId:49,medicineId:11,dosage:"1g",frequency:"Twice daily",durationDays:3,issuedDate:"2025-12-27",diagnosis:"Acute upper respiratory infection"},
+    {id:11,appointmentId:19,doctorId:1,patientId:25,medicineId:56,dosage:"5mg",frequency:"As needed",durationDays:27,issuedDate:"2026-02-27",diagnosis:"Lower back pain"},
+    {id:12,appointmentId:23,doctorId:10,patientId:13,medicineId:37,dosage:"400mg",frequency:"Every 8 hours",durationDays:18,issuedDate:"2026-01-29",diagnosis:"Vitamin D deficiency"},
+    {id:13,appointmentId:25,doctorId:48,patientId:35,medicineId:18,dosage:"400mg",frequency:"Once daily",durationDays:18,issuedDate:"2025-12-21",diagnosis:"Routine follow-up, stable"},
+    {id:14,appointmentId:26,doctorId:48,patientId:21,medicineId:27,dosage:"10mg",frequency:"As needed",durationDays:11,issuedDate:"2025-12-19",diagnosis:"GERD"},
+    {id:15,appointmentId:30,doctorId:6,patientId:55,medicineId:30,dosage:"5mg",frequency:"Once daily",durationDays:21,issuedDate:"2025-07-27",diagnosis:"Anxiety and stress"},
+    {id:16,appointmentId:31,doctorId:5,patientId:39,medicineId:5,dosage:"250mg",frequency:"Once daily",durationDays:26,issuedDate:"2025-11-11",diagnosis:"Type 2 diabetes follow-up"},
+    {id:17,appointmentId:33,doctorId:8,patientId:37,medicineId:1,dosage:"500mg",frequency:"Once daily",durationDays:19,issuedDate:"2025-06-27",diagnosis:"Allergic rhinitis"},
+    {id:18,appointmentId:34,doctorId:38,patientId:39,medicineId:44,dosage:"500mg",frequency:"Every 8 hours",durationDays:8,issuedDate:"2026-02-17",diagnosis:"Hypertensive episode"},
+    {id:19,appointmentId:37,doctorId:34,patientId:21,medicineId:43,dosage:"40mg",frequency:"Three times daily",durationDays:17,issuedDate:"2026-03-07",diagnosis:"Anxiety and stress"},
+    {id:20,appointmentId:39,doctorId:21,patientId:16,medicineId:35,dosage:"40mg",frequency:"Twice daily",durationDays:29,issuedDate:"2025-08-26",diagnosis:"Lower back pain"},
+    {id:21,appointmentId:42,doctorId:21,patientId:49,medicineId:55,dosage:"10mg",frequency:"Three times daily",durationDays:30,issuedDate:"2025-10-30",diagnosis:"Hypertensive episode"},
+    {id:22,appointmentId:44,doctorId:37,patientId:7,medicineId:55,dosage:"200mg",frequency:"Three times daily",durationDays:13,issuedDate:"2025-11-14",diagnosis:"Allergic rhinitis"},
+    {id:23,appointmentId:46,doctorId:17,patientId:9,medicineId:50,dosage:"10mg",frequency:"Three times daily",durationDays:27,issuedDate:"2025-05-23",diagnosis:"Anxiety and stress"},
+    {id:24,appointmentId:47,doctorId:5,patientId:16,medicineId:48,dosage:"200mg",frequency:"Every 8 hours",durationDays:19,issuedDate:"2026-01-23",diagnosis:"Vitamin D deficiency"},
+    {id:25,appointmentId:49,doctorId:35,patientId:46,medicineId:26,dosage:"10mg",frequency:"Every 8 hours",durationDays:26,issuedDate:"2026-01-27",diagnosis:"Vitamin D deficiency"},
+    {id:26,appointmentId:53,doctorId:7,patientId:9,medicineId:54,dosage:"10mg",frequency:"Once daily",durationDays:11,issuedDate:"2025-12-26",diagnosis:"Hypertensive episode"},
+    {id:27,appointmentId:55,doctorId:36,patientId:10,medicineId:10,dosage:"1g",frequency:"Three times daily",durationDays:28,issuedDate:"2026-05-04",diagnosis:"Acute upper respiratory infection"},
+    {id:28,appointmentId:56,doctorId:19,patientId:39,medicineId:14,dosage:"400mg",frequency:"As needed",durationDays:20,issuedDate:"2025-08-29",diagnosis:"Routine follow-up, stable"},
+    {id:29,appointmentId:57,doctorId:46,patientId:22,medicineId:44,dosage:"400mg",frequency:"Once daily",durationDays:19,issuedDate:"2025-11-22",diagnosis:"Acute upper respiratory infection"},
+    {id:30,appointmentId:58,doctorId:44,patientId:41,medicineId:55,dosage:"400mg",frequency:"Once daily",durationDays:23,issuedDate:"2025-08-13",diagnosis:"Type 2 diabetes follow-up"},
+    {id:31,appointmentId:59,doctorId:33,patientId:32,medicineId:18,dosage:"1g",frequency:"Three times daily",durationDays:4,issuedDate:"2025-12-03",diagnosis:"Vitamin D deficiency"},
+    {id:32,appointmentId:61,doctorId:28,patientId:54,medicineId:47,dosage:"400mg",frequency:"As needed",durationDays:15,issuedDate:"2026-02-01",diagnosis:"Hypertensive episode"},
+    {id:33,appointmentId:62,doctorId:3,patientId:1,medicineId:57,dosage:"10mg",frequency:"Once daily",durationDays:14,issuedDate:"2025-06-15",diagnosis:"Anxiety and stress"},
+    {id:34,appointmentId:66,doctorId:28,patientId:36,medicineId:42,dosage:"400mg",frequency:"Once daily",durationDays:4,issuedDate:"2026-02-27",diagnosis:"Anxiety and stress"},
+    {id:35,appointmentId:68,doctorId:10,patientId:35,medicineId:48,dosage:"1g",frequency:"Every 8 hours",durationDays:15,issuedDate:"2025-08-21",diagnosis:"Vitamin D deficiency"},
+    {id:36,appointmentId:70,doctorId:10,patientId:28,medicineId:55,dosage:"500mg",frequency:"Every 8 hours",durationDays:3,issuedDate:"2025-09-27",diagnosis:"Hypertensive episode"},
+    {id:37,appointmentId:71,doctorId:3,patientId:20,medicineId:3,dosage:"40mg",frequency:"Twice daily",durationDays:4,issuedDate:"2026-02-02",diagnosis:"GERD"},
+    {id:38,appointmentId:72,doctorId:3,patientId:23,medicineId:53,dosage:"400mg",frequency:"Three times daily",durationDays:23,issuedDate:"2025-06-30",diagnosis:"Type 2 diabetes follow-up"},
+    {id:39,appointmentId:76,doctorId:10,patientId:16,medicineId:35,dosage:"500mg",frequency:"Once daily",durationDays:4,issuedDate:"2025-05-26",diagnosis:"Vitamin D deficiency"},
+    {id:40,appointmentId:77,doctorId:12,patientId:27,medicineId:47,dosage:"40mg",frequency:"As needed",durationDays:25,issuedDate:"2026-02-07",diagnosis:"Hypertensive episode"},
+    {id:41,appointmentId:78,doctorId:12,patientId:48,medicineId:12,dosage:"100mg",frequency:"Twice daily",durationDays:20,issuedDate:"2026-05-07",diagnosis:"Routine follow-up, stable"},
+    {id:42,appointmentId:80,doctorId:48,patientId:52,medicineId:50,dosage:"20mg",frequency:"Three times daily",durationDays:18,issuedDate:"2025-12-19",diagnosis:"Allergic rhinitis"},
+    {id:43,appointmentId:82,doctorId:7,patientId:25,medicineId:13,dosage:"100mg",frequency:"As needed",durationDays:16,issuedDate:"2026-02-26",diagnosis:"Routine follow-up, stable"},
+    {id:44,appointmentId:83,doctorId:31,patientId:15,medicineId:25,dosage:"200mg",frequency:"Twice daily",durationDays:15,issuedDate:"2025-11-02",diagnosis:"Hypertensive episode"},
+    {id:45,appointmentId:84,doctorId:30,patientId:23,medicineId:14,dosage:"400mg",frequency:"Three times daily",durationDays:23,issuedDate:"2025-12-23",diagnosis:"Urinary tract infection"},
+    {id:46,appointmentId:85,doctorId:15,patientId:15,medicineId:22,dosage:"40mg",frequency:"Twice daily",durationDays:19,issuedDate:"2025-11-21",diagnosis:"Vitamin D deficiency"},
+    {id:47,appointmentId:87,doctorId:22,patientId:18,medicineId:23,dosage:"5mg",frequency:"Three times daily",durationDays:14,issuedDate:"2026-02-26",diagnosis:"Allergic rhinitis"},
+    {id:48,appointmentId:88,doctorId:50,patientId:18,medicineId:11,dosage:"20mg",frequency:"Twice daily",durationDays:29,issuedDate:"2025-12-16",diagnosis:"GERD"},
+    {id:49,appointmentId:91,doctorId:22,patientId:2,medicineId:34,dosage:"100mg",frequency:"Three times daily",durationDays:12,issuedDate:"2025-10-04",diagnosis:"Anxiety and stress"},
+    {id:50,appointmentId:93,doctorId:17,patientId:3,medicineId:16,dosage:"500mg",frequency:"Every 8 hours",durationDays:21,issuedDate:"2025-10-04",diagnosis:"Hypertensive episode"},
+    {id:51,appointmentId:94,doctorId:39,patientId:28,medicineId:18,dosage:"10mg",frequency:"Twice daily",durationDays:3,issuedDate:"2026-05-13",diagnosis:"GERD"},
+    {id:52,appointmentId:95,doctorId:47,patientId:51,medicineId:38,dosage:"40mg",frequency:"Every 8 hours",durationDays:19,issuedDate:"2025-05-26",diagnosis:"Vitamin D deficiency"},
+    {id:53,appointmentId:98,doctorId:13,patientId:17,medicineId:40,dosage:"40mg",frequency:"Every 8 hours",durationDays:29,issuedDate:"2025-07-19",diagnosis:"Hypertensive episode"},
+    {id:54,appointmentId:99,doctorId:46,patientId:28,medicineId:44,dosage:"100mg",frequency:"As needed",durationDays:14,issuedDate:"2026-01-28",diagnosis:"Anxiety and stress"},
+    {id:55,appointmentId:101,doctorId:17,patientId:21,medicineId:32,dosage:"40mg",frequency:"Twice daily",durationDays:15,issuedDate:"2024-04-11",diagnosis:"Lower back pain"},
+    {id:56,appointmentId:102,doctorId:13,patientId:53,medicineId:56,dosage:"200mg",frequency:"Every 8 hours",durationDays:22,issuedDate:"2024-02-28",diagnosis:"GERD"},
+    {id:57,appointmentId:103,doctorId:31,patientId:36,medicineId:2,dosage:"400mg",frequency:"Three times daily",durationDays:12,issuedDate:"2024-11-09",diagnosis:"Anxiety and stress"},
+    {id:58,appointmentId:104,doctorId:10,patientId:36,medicineId:33,dosage:"100mg",frequency:"As needed",durationDays:3,issuedDate:"2024-11-18",diagnosis:"Routine follow-up, stable"},
+    {id:59,appointmentId:105,doctorId:1,patientId:55,medicineId:5,dosage:"40mg",frequency:"Three times daily",durationDays:14,issuedDate:"2024-05-23",diagnosis:"GERD"},
+    {id:60,appointmentId:106,doctorId:32,patientId:12,medicineId:39,dosage:"500mg",frequency:"Three times daily",durationDays:14,issuedDate:"2024-04-07",diagnosis:"Type 2 diabetes follow-up"},
+    {id:61,appointmentId:107,doctorId:25,patientId:12,medicineId:8,dosage:"100mg",frequency:"Twice daily",durationDays:8,issuedDate:"2024-06-18",diagnosis:"Acute upper respiratory infection"},
+    {id:62,appointmentId:108,doctorId:8,patientId:6,medicineId:32,dosage:"400mg",frequency:"Three times daily",durationDays:13,issuedDate:"2024-10-09",diagnosis:"Urinary tract infection"},
+    {id:63,appointmentId:109,doctorId:35,patientId:31,medicineId:6,dosage:"10mg",frequency:"Twice daily",durationDays:8,issuedDate:"2024-04-14",diagnosis:"Urinary tract infection"},
+    {id:64,appointmentId:110,doctorId:13,patientId:5,medicineId:28,dosage:"250mg",frequency:"Every 8 hours",durationDays:21,issuedDate:"2024-02-11",diagnosis:"Hypertensive episode"},
+    {id:65,appointmentId:111,doctorId:45,patientId:36,medicineId:33,dosage:"40mg",frequency:"Twice daily",durationDays:9,issuedDate:"2024-08-12",diagnosis:"Routine follow-up, stable"},
+    {id:66,appointmentId:112,doctorId:5,patientId:7,medicineId:3,dosage:"100mg",frequency:"Once daily",durationDays:22,issuedDate:"2024-12-28",diagnosis:"Lower back pain"},
+    {id:67,appointmentId:113,doctorId:48,patientId:22,medicineId:59,dosage:"250mg",frequency:"Once daily",durationDays:3,issuedDate:"2024-02-14",diagnosis:"Acute upper respiratory infection"},
+    {id:68,appointmentId:114,doctorId:37,patientId:30,medicineId:47,dosage:"20mg",frequency:"Every 8 hours",durationDays:17,issuedDate:"2024-02-10",diagnosis:"GERD"},
+    {id:69,appointmentId:115,doctorId:7,patientId:18,medicineId:26,dosage:"200mg",frequency:"Once daily",durationDays:30,issuedDate:"2024-08-15",diagnosis:"Allergic rhinitis"},
+    {id:70,appointmentId:116,doctorId:8,patientId:23,medicineId:33,dosage:"20mg",frequency:"As needed",durationDays:10,issuedDate:"2024-09-28",diagnosis:"Routine follow-up, stable"},
+    {id:71,appointmentId:117,doctorId:50,patientId:26,medicineId:57,dosage:"250mg",frequency:"As needed",durationDays:25,issuedDate:"2024-10-25",diagnosis:"Type 2 diabetes follow-up"},
+    {id:72,appointmentId:118,doctorId:16,patientId:15,medicineId:12,dosage:"200mg",frequency:"Twice daily",durationDays:11,issuedDate:"2024-10-20",diagnosis:"Urinary tract infection"},
+    {id:73,appointmentId:119,doctorId:26,patientId:48,medicineId:20,dosage:"250mg",frequency:"As needed",durationDays:20,issuedDate:"2024-03-11",diagnosis:"Hypertensive episode"},
+    {id:74,appointmentId:120,doctorId:1,patientId:3,medicineId:34,dosage:"5mg",frequency:"Three times daily",durationDays:23,issuedDate:"2024-01-27",diagnosis:"Anxiety and stress"},
   ],
 };
 
@@ -153,7 +593,7 @@ function ToastProvider({children}){
       {children}
       <div style={{position:"fixed",top:16,right:16,zIndex:9999,display:"flex",flexDirection:"column",gap:6,pointerEvents:"none"}}>
         {toasts.map(t=>(
-          <div key={t.id} style={{display:"flex",alignItems:"center",gap:10,background:C.el,border:`1px solid ${C.bd}`,borderLeft:`2px solid ${col[t.type]}`,borderRadius:8,padding:"10px 14px",boxShadow:"0 8px 32px rgba(0,0,0,.4)",animation:"slideIn .18s ease",minWidth:220,maxWidth:340,pointerEvents:"all"}}>
+          <div key={t.id} style={{display:"flex",alignItems:"center",gap:10,background:C.el,border:`1px solid ${C.bd}`,borderLeft:`2px solid ${col[t.type]}`,borderRadius:8,padding:"10px 14px",boxShadow:"0 4px 20px rgba(97,139,74,.14),0 1px 6px rgba(0,0,0,.06)",animation:"slideIn .18s ease",minWidth:220,maxWidth:340,pointerEvents:"all"}}>
             <div style={{width:5,height:5,borderRadius:"50%",background:col[t.type],flexShrink:0}}/>
             <span style={{color:C.t2,fontSize:13,fontFamily:C.fn,lineHeight:1.4}}>{t.msg}</span>
           </div>
@@ -168,7 +608,7 @@ function useToast(){return useContext(ToastCtx);}
 function ConfirmDialog({message,onConfirm,onCancel}){
   return(
     <div style={{position:"fixed",inset:0,zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(0,0,0,.65)",backdropFilter:"blur(6px)"}}>
-      <div style={{background:C.el,border:`1px solid ${C.bdm}`,borderRadius:12,padding:"24px",width:"min(360px,90vw)",boxShadow:"0 24px 64px rgba(0,0,0,.5)",animation:"scaleIn .15s ease"}}>
+      <div style={{background:C.el,border:`1px solid ${C.bdm}`,borderRadius:12,padding:"24px",width:"min(360px,90vw)",boxShadow:"0 8px 32px rgba(97,139,74,.12),0 2px 8px rgba(0,0,0,.08)",animation:"scaleIn .15s ease"}}>
         <p style={{fontSize:14,color:C.t2,lineHeight:1.6,margin:"0 0 20px",fontFamily:C.fn}}>{message}</p>
         <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
           <button onClick={onCancel} className="btn-ghost">Cancel</button>
@@ -231,21 +671,11 @@ function LoadingScreen({onDone}){
   return(
     <div style={{position:"fixed",inset:0,zIndex:9000,background:C.bg,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",opacity:exit?0:1,transform:exit?"scale(1.02)":"scale(1)",transition:"opacity .5s ease,transform .5s ease",fontFamily:C.fn}}>
       {/* Logo */}
-      <div style={{...show(1),marginBottom:24}}>
-        <div style={{width:48,height:48,borderRadius:12,background:C.sf,border:`1px solid ${C.bdm}`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto"}}>
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <rect x="9" y="1" width="4" height="20" rx="2" fill={C.gr}/>
-            <rect x="1" y="9" width="20" height="4" rx="2" fill={C.gr}/>
-          </svg>
-        </div>
-      </div>
-
-      {/* Title */}
-      <div style={{...show(1,.05),textAlign:"center",marginBottom:6}}>
-        <div style={{fontSize:32,fontWeight:700,color:C.tx,letterSpacing:"-.03em",lineHeight:1}}>HAPMS</div>
+      <div style={{...show(1,.05),textAlign:"center",marginBottom:4}}>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAADVCAYAAAAmTCnuAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAABQKADAAQAAAABAAAA1QAAAACw5VwxAAApBElEQVR4Ae2dCZxdRZ3vq8529963dGclJCEbSQighCVs+gbRcRSDgyKK+ByfyAygKOP48TXjzHPUT9QRBxUVUWRc4jqoEJEtUSOYgCQEkhCSSDqddHpPd9/tLPV+de69nU53J+nudN74kl8l9/a559Ryzvfc+p1/Vf2rrhAMJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJ4uAebIyZr5FArfcEhFLl0ZEKqXEnj3BSeCCe9gYEyLuCDEgkb9/EspgliRwShLQFYbhZBD47B0NojLVZPrBDJH3k37M2i+U/WfRuuNV0Xx/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tYncwa35g89iGfgTX96o5r0/T0Wq5i4S+LEjy7Ic33Vzbn9Xi7nr1S2tD71pfMtN/eWA45mQAAmcYgT0QAi7G06xm8rLIQESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIIH/3wj8Xy44xJ/4it5UAAAAAElFTkSuQmCC" alt="HAPMS" style={{height:100,objectFit:"contain",filter:"drop-shadow(0 4px 20px rgba(97,139,74,.40))"}}/>
       </div>
       <div style={{...show(2),textAlign:"center",marginBottom:40}}>
-        <div style={{fontSize:11,color:C.t3,letterSpacing:".18em",textTransform:"uppercase",fontFamily:C.mo}}>Healthcare Operating System</div>
+        <div style={{fontSize:11,color:C.t3,letterSpacing:".16em",textTransform:"uppercase",fontFamily:C.mo}}>Built for Better Health</div>
       </div>
 
       {/* Divider */}
@@ -258,7 +688,7 @@ function LoadingScreen({onDone}){
 
       <div style={{fontSize:18,fontWeight:600,letterSpacing:".12em",textTransform:"uppercase",height:28,display:"flex",alignItems:"center",marginBottom:8,fontFamily:C.mo}}>
         {chars1.map((c,i)=>(
-          <span key={i} style={{color:c.lit?"#fff":C.gr,transition:"color .22s",display:"inline-block"}}>{c.ch===" "?" ":c.ch}</span>
+          <span key={i} style={{color:c.lit?C.tx:C.gr,transition:"color .22s",display:"inline-block"}}>{c.ch===" "?" ":c.ch}</span>
         ))}
       </div>
 
@@ -270,7 +700,7 @@ function LoadingScreen({onDone}){
 
       <div style={{fontSize:15,fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",height:24,display:"flex",alignItems:"center",marginBottom:40,fontFamily:C.mo}}>
         {chars2.map((c,i)=>(
-          <span key={i} style={{color:c.lit?"#fff":C.te,transition:"color .22s",display:"inline-block"}}>{c.ch===" "?" ":c.ch}</span>
+          <span key={i} style={{color:c.lit?C.tx:C.te,transition:"color .22s",display:"inline-block"}}>{c.ch===" "?" ":c.ch}</span>
         ))}
       </div>
 
@@ -308,11 +738,9 @@ function LoginScreen({onLogin}){
     <div style={{position:"fixed",inset:0,background:C.bg,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:C.fn}}>
       <div style={{width:"min(380px,92vw)",animation:"fadeUp .35s ease"}}>
         <div style={{textAlign:"center",marginBottom:32}}>
-          <div style={{width:44,height:44,borderRadius:10,background:C.sf,border:`1px solid ${C.bdm}`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px"}}>
-            <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><rect x="9" y="1" width="4" height="20" rx="2" fill={C.gr}/><rect x="1" y="9" width="20" height="4" rx="2" fill={C.gr}/></svg>
-          </div>
-          <h1 style={{fontSize:22,fontWeight:600,color:C.tx,margin:"0 0 6px",letterSpacing:"-.02em"}}>Sign in to HAPMS</h1>
-          <p style={{fontSize:13,color:C.t3,margin:0}}>Hospital Administration & Patient Management</p>
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAADVCAYAAAAmTCnuAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAABQKADAAQAAAABAAAA1QAAAACw5VwxAAApBElEQVR4Ae2dCZxdRZ3vq8529963dGclJCEbSQighCVs+gbRcRSDgyKK+ByfyAygKOP48TXjzHPUT9QRBxUVUWRc4jqoEJEtUSOYgCQEkhCSSDqddHpPd9/tLPV+de69nU53J+nudN74kl8l9/a559Ryzvfc+p1/Vf2rrhAMJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJ4uAebIyZr5FArfcEhFLl0ZEKqXEnj3BSeCCe9gYEyLuCDEgkb9/EspgliRwShLQFYbhZBD47B0NojLVZPrBDJH3k37M2i+U/WfRuuNV0Xx/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tYncwa35g89iGfgTX96o5r0/T0Wq5i4S+LEjy7Ic33Vzbn9Xi7nr1S2tD71pfMtN/eWA45mQAAmcYgT0QAi7G06xm8rLIQESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIIH/3wj8Xy44xJ/4it5UAAAAAElFTkSuQmCC" alt="HAPMS" style={{height:80,objectFit:"contain",margin:"0 auto 12px",display:"block",filter:"drop-shadow(0 2px 10px rgba(97,139,74,.20))"}}/>
+          <p style={{fontSize:12,color:C.t3,margin:"0 0 2px",letterSpacing:".14em",textTransform:"uppercase",fontFamily:C.mo}}>Built for Better Health</p>
+          <h1 style={{fontSize:16,fontWeight:500,color:C.t3,margin:"6px 0 0",letterSpacing:"-.01em"}}>Sign in to continue</h1>
         </div>
 
         <div style={{background:C.sf,border:`1px solid ${C.bd}`,borderRadius:12,padding:24}}>
@@ -329,14 +757,14 @@ function LoginScreen({onLogin}){
                 style={{...inpS,paddingRight:52}} onFocus={e=>e.target.style.borderColor=C.gr} onBlur={e=>e.target.style.borderColor=C.bd}/>
               <button type="button" onClick={()=>setShow(s=>!s)} style={{position:"absolute",right:10,top:34,background:"none",border:"none",color:C.t3,cursor:"pointer",fontSize:12,fontFamily:C.mo,padding:"2px 4px"}}>{show?"hide":"show"}</button>
             </div>
-            <button type="submit" disabled={loading} style={{width:"100%",padding:"10px",borderRadius:8,border:"none",background:loading?"rgba(34,197,94,.5)":C.gr,color:"#052e16",fontFamily:C.fn,fontWeight:600,fontSize:14,cursor:loading?"not-allowed":"pointer",transition:"opacity .15s"}}>
+            <button type="submit" disabled={loading} style={{width:"100%",padding:"10px",borderRadius:8,border:"none",background:loading?`${C.gr}88`:C.gr,color:"#ffffff",fontFamily:C.fn,fontWeight:600,fontSize:14,cursor:loading?"not-allowed":"pointer",transition:"opacity .15s"}}>
               {loading?"Signing in…":"Continue"}
             </button>
           </form>
         </div>
 
         <div style={{marginTop:12,display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
-          {[{role:"Admin",u:"admin",p:"admin123",c:C.gr},{role:"Doctor",u:"fatima",p:"doc123",c:C.bl},{role:"Reception",u:"recep",p:"recep123",c:C.am}].map(h=>(
+          {[{role:"Admin",u:"admin",p:"admin123",c:C.gr},{role:"Doctor",u:"allison",p:"doc123",c:C.bl},{role:"Reception",u:"recep",p:"recep123",c:C.am}].map(h=>(
             <button key={h.role} onClick={()=>{setUser(h.u);setPass(h.p);}} style={{background:C.sf,border:`1px solid ${C.bd}`,borderRadius:8,padding:"10px 8px",cursor:"pointer",textAlign:"left",transition:"border-color .15s"}} onMouseEnter={e=>e.currentTarget.style.borderColor=h.c} onMouseLeave={e=>e.currentTarget.style.borderColor=C.bd}>
               <div style={{fontSize:11,color:h.c,fontFamily:C.mo,fontWeight:500,marginBottom:3}}>{h.role}</div>
               <div style={{fontSize:11,color:C.t3,fontFamily:C.mo}}>{h.u}</div>
@@ -384,7 +812,7 @@ function CommandPalette({store,setActive,onClose}){
 
   return(
     <div style={{position:"fixed",inset:0,zIndex:2000,display:"flex",alignItems:"flex-start",justifyContent:"center",paddingTop:"12vh",background:"rgba(0,0,0,.7)",backdropFilter:"blur(8px)"}} onClick={onClose}>
-      <div style={{width:"min(580px,92vw)",background:C.el,borderRadius:12,border:`1px solid ${C.bdm}`,boxShadow:"0 32px 80px rgba(0,0,0,.6)",animation:"scaleIn .16s ease",overflow:"hidden"}} onClick={e=>e.stopPropagation()}>
+      <div style={{width:"min(580px,92vw)",background:C.el,borderRadius:12,border:`1px solid ${C.bdm}`,boxShadow:"0 12px 40px rgba(97,139,74,.15),0 2px 12px rgba(0,0,0,.08)",animation:"scaleIn .16s ease",overflow:"hidden"}} onClick={e=>e.stopPropagation()}>
         <div style={{display:"flex",alignItems:"center",padding:"12px 16px",borderBottom:`1px solid ${C.bd}`,gap:10}}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke={C.t3} strokeWidth="1.5" strokeLinecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/></svg>
           <input ref={ref} value={q} onChange={e=>setQ(e.target.value)} placeholder="Search doctors, patients, medicines…" style={{flex:1,background:"none",border:"none",outline:"none",color:C.tx,fontSize:14,fontFamily:C.fn}}/>
@@ -437,7 +865,7 @@ function Modal({title,onClose,children,wide}){
   useEffect(()=>{const h=e=>{if(e.key==="Escape")onClose();};window.addEventListener("keydown",h);return()=>window.removeEventListener("keydown",h);},[onClose]);
   return(
     <div style={{position:"fixed",inset:0,zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(0,0,0,.65)",backdropFilter:"blur(8px)"}}>
-      <div style={{background:C.el,border:`1px solid ${C.bdm}`,borderRadius:14,padding:"24px",width:`min(${wide?"660px":"500px"},95vw)`,maxHeight:"92vh",overflowY:"auto",boxShadow:"0 32px 80px rgba(0,0,0,.6)",animation:"scaleIn .18s ease"}}>
+      <div style={{background:C.el,border:`1px solid ${C.bdm}`,borderRadius:14,padding:"24px",width:`min(${wide?"660px":"500px"},95vw)`,maxHeight:"92vh",overflowY:"auto",boxShadow:"0 12px 40px rgba(97,139,74,.15),0 2px 12px rgba(0,0,0,.08)",animation:"scaleIn .18s ease"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
           <h2 style={{fontSize:16,fontWeight:600,color:C.tx,margin:0,letterSpacing:"-.01em"}}>{title}</h2>
           <button onClick={onClose} style={{width:28,height:28,borderRadius:7,background:C.sf,border:`1px solid ${C.bd}`,color:C.t3,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",lineHeight:1,transition:"background .15s,color .15s"}} onMouseEnter={e=>{e.currentTarget.style.background=C.ov;e.currentTarget.style.color=C.tx;}} onMouseLeave={e=>{e.currentTarget.style.background=C.sf;e.currentTarget.style.color=C.t3;}}>×</button>
@@ -463,7 +891,7 @@ function DataTable({cols,rows,onEdit,onDelete,onView}){
         <tbody>
           {rows.length===0&&<tr><td colSpan={cols.length+1} style={{padding:"48px 16px",textAlign:"center",color:C.t4,fontFamily:C.mo,fontSize:12,letterSpacing:".06em"}}>No records found</td></tr>}
           {rows.map((row,i)=>(
-            <tr key={row.id??i} style={{transition:"background .1s"}} onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.03)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+            <tr key={row.id??i} style={{transition:"background .1s"}} onMouseEnter={e=>e.currentTarget.style.background="rgba(97,139,74,.04)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
               {cols.map(c=><td key={c.key} style={{padding:"12px 16px",borderBottom:`1px solid ${C.bd}`,color:C.tx,fontSize:13,verticalAlign:"middle"}}>{c.render?c.render(row[c.key],row):(c.mono?<span style={{fontFamily:C.mo,fontSize:12,color:C.t2}}>{row[c.key]??"-"}</span>:<span style={{color:C.t2,fontSize:13}}>{row[c.key]??"-"}</span>)}</td>)}
               {(onEdit||onDelete||onView)&&<td style={{padding:"12px 16px",borderBottom:`1px solid ${C.bd}`,whiteSpace:"nowrap",textAlign:"right"}}>
                 <div style={{display:"flex",gap:6,justifyContent:"flex-end"}}>
@@ -543,7 +971,7 @@ function Overview({store,setActive,currentUser}){
             <div style={{padding:"32px 20px",textAlign:"center",color:C.t4,fontSize:13}}>No upcoming appointments</div>
           ):(
             upcoming.map(a=>(
-              <div key={a.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 20px",borderBottom:`1px solid ${C.bd}`,transition:"background .1s"}} onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.02)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              <div key={a.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 20px",borderBottom:`1px solid ${C.bd}`,transition:"background .1s"}} onMouseEnter={e=>e.currentTarget.style.background="rgba(97,139,74,.03)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
                 <div>
                   <div style={{fontSize:13,fontWeight:500,color:C.tx,marginBottom:3}}>{getPtName(store,a.patientId)}</div>
                   <div style={{fontSize:12,color:C.t3,fontFamily:C.mo}}>{getDrName(store,a.doctorId)} · {a.scheduledAt.slice(0,16)}</div>
@@ -561,7 +989,7 @@ function Overview({store,setActive,currentUser}){
             <div style={{fontSize:13,fontWeight:600,color:C.tx,marginBottom:14}}>Quick Actions</div>
             <div style={{display:"flex",flexDirection:"column",gap:8}}>
               {quickActions.map(qa=>(
-                <button key={qa.s} onClick={()=>setActive(qa.s)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 12px",borderRadius:8,border:`1px solid ${C.bd}`,background:"transparent",color:C.t2,cursor:"pointer",fontFamily:C.fn,fontSize:13,fontWeight:500,transition:"all .14s",textAlign:"left"}} onMouseEnter={e=>{e.currentTarget.style.borderColor=qa.c;e.currentTarget.style.color=C.tx;e.currentTarget.style.background="rgba(255,255,255,.03)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor=C.bd;e.currentTarget.style.color=C.t2;e.currentTarget.style.background="transparent";}}>
+                <button key={qa.s} onClick={()=>setActive(qa.s)} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 12px",borderRadius:8,border:`1px solid ${C.bd}`,background:"transparent",color:C.t2,cursor:"pointer",fontFamily:C.fn,fontSize:13,fontWeight:500,transition:"all .14s",textAlign:"left"}} onMouseEnter={e=>{e.currentTarget.style.borderColor=qa.c;e.currentTarget.style.color=C.tx;e.currentTarget.style.background="rgba(97,139,74,.05)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor=C.bd;e.currentTarget.style.color=C.t2;e.currentTarget.style.background="transparent";}}>
                   {qa.label}
                   <span style={{color:C.t4,fontSize:14}}>↗</span>
                 </button>
@@ -986,7 +1414,7 @@ function Medicines({store,setStore,readOnly}){
     setModal(null);
   }
 
-  const typeCol={"Antibiotic":C.bl,"Analgesic":C.am,"Antidiabetic":C.pu,"ACE Inhibitor":C.te,"Statin":C.gr,"PPI":"#fb923c","Bronchodilator":C.bl,"Antihistamine":C.pu};
+  const typeCol={"Antibiotic":C.bl,"Analgesic":C.am,"Antidiabetic":C.pu,"ACE Inhibitor":C.te,"ARB":C.te,"Statin":C.gr,"PPI":C.am,"H2 Blocker":C.am,"Bronchodilator":C.bl,"Antihistamine":C.pu,"Calcium Channel Blocker":C.te,"Beta Blocker":C.bl,"Thyroid Hormone":C.pu,"Corticosteroid":C.rd,"SSRI":C.pu,"Antifungal":C.te,"Opioid Analgesic":C.rd,"Anticoagulant":C.rd,"Antiplatelet":C.rd,"Diuretic":C.bl,"Anticonvulsant":C.pu,"NSAID":C.am,"Insulin":C.gr,"Vitamin":C.gr,"Iron Supplement":C.rd,"Mineral Supplement":C.gr,"Laxative":C.te,"Antiemetic":C.te};
   const rows=store.medicines.filter(m=>!search||m.name.toLowerCase().includes(search.toLowerCase())||m.type.toLowerCase().includes(search.toLowerCase())||m.manufacturer.toLowerCase().includes(search.toLowerCase()));
 
   return(
@@ -1170,45 +1598,41 @@ function App(){
         html,body{background:${C.bg};color:${C.tx};font-family:${C.fn};-webkit-font-smoothing:antialiased;height:100%;}
         ::-webkit-scrollbar{width:4px;height:4px}
         ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
-        select option{background:${C.el};color:${C.tx};}
+        ::-webkit-scrollbar-thumb{background:rgba(97,139,74,.2);border-radius:4px}
+        ::-webkit-scrollbar-thumb:hover{background:rgba(97,139,74,.35)}
+        select option{background:${C.sf};color:${C.tx};}
         input[type="date"]::-webkit-calendar-picker-indicator,
         input[type="datetime-local"]::-webkit-calendar-picker-indicator,
-        input[type="time"]::-webkit-calendar-picker-indicator{filter:invert(.4);cursor:pointer;}
+        input[type="time"]::-webkit-calendar-picker-indicator{opacity:.5;cursor:pointer;}
         @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes scaleIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
         @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
         @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
-        .btn-primary{padding:7px 16px;border-radius:7px;border:none;background:${C.gr};color:#052e16;font-family:${C.fn};font-weight:600;font-size:13px;cursor:pointer;transition:opacity .15s;}
+        .btn-primary{padding:7px 16px;border-radius:7px;border:none;background:${C.gr};color:#ffffff;font-family:${C.fn};font-weight:600;font-size:13px;cursor:pointer;transition:opacity .15s;}
         .btn-primary:hover{opacity:.88;}
         .btn-ghost{padding:7px 16px;border-radius:7px;border:1px solid ${C.bd};background:transparent;color:${C.t2};font-family:${C.fn};font-weight:500;font-size:13px;cursor:pointer;transition:background .15s,border-color .15s;}
         .btn-ghost:hover{background:${C.el};border-color:${C.bdm};}
-        .btn-danger{padding:7px 16px;border-radius:7px;border:1px solid rgba(239,68,68,.2);background:${C.rdb};color:${C.rd};font-family:${C.fn};font-weight:500;font-size:13px;cursor:pointer;transition:background .15s;}
-        .btn-danger:hover{background:rgba(239,68,68,.16);}
+        .btn-danger{padding:7px 16px;border-radius:7px;border:1px solid rgba(184,69,69,.2);background:${C.rdb};color:${C.rd};font-family:${C.fn};font-weight:500;font-size:13px;cursor:pointer;transition:background .15s;}
+        .btn-danger:hover{background:rgba(184,69,69,.16);}
         .btn-sm-ghost{padding:4px 10px;border-radius:5px;border:1px solid ${C.bd};background:transparent;color:${C.t3};font-family:${C.fn};font-size:12px;cursor:pointer;transition:all .12s;}
         .btn-sm-ghost:hover{border-color:${C.bdm};color:${C.t2};background:${C.el};}
-        .btn-sm-danger{padding:4px 10px;border-radius:5px;border:1px solid rgba(239,68,68,.15);background:transparent;color:${C.rd};font-family:${C.fn};font-size:12px;cursor:pointer;transition:all .12s;opacity:.7;}
+        .btn-sm-danger{padding:4px 10px;border-radius:5px;border:1px solid rgba(184,69,69,.15);background:transparent;color:${C.rd};font-family:${C.fn};font-size:12px;cursor:pointer;transition:all .12s;opacity:.7;}
         .btn-sm-danger:hover{opacity:1;background:${C.rdb};}
       `}</style>
 
       <div style={{display:"flex",minHeight:"100vh"}}>
         {/* Sidebar */}
-        <aside style={{width:240,minHeight:"100vh",position:"fixed",top:0,left:0,bottom:0,background:"rgba(11,13,15,.98)",borderRight:`1px solid ${C.bd}`,display:"flex",flexDirection:"column",zIndex:100}}>
+        <aside style={{width:240,minHeight:"100vh",position:"fixed",top:0,left:0,bottom:0,background:"rgba(255,255,255,.98)",borderRight:`1px solid ${C.bd}`,display:"flex",flexDirection:"column",zIndex:100}}>
           {/* Logo */}
-          <div style={{height:56,display:"flex",alignItems:"center",gap:10,padding:"0 16px",borderBottom:`1px solid ${C.bd}`,flexShrink:0}}>
-            <div style={{width:28,height:28,borderRadius:7,background:C.sf,border:`1px solid ${C.bdm}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-              <svg width="14" height="14" viewBox="0 0 22 22" fill="none"><rect x="9" y="1" width="4" height="20" rx="2" fill={C.gr}/><rect x="1" y="9" width="20" height="4" rx="2" fill={C.gr}/></svg>
-            </div>
-            <div>
-              <div style={{fontSize:14,fontWeight:700,color:C.tx,letterSpacing:"-.02em",lineHeight:1}}>HAPMS</div>
-              <div style={{fontSize:10,color:C.t4,fontFamily:C.mo,letterSpacing:".08em",marginTop:2}}>CLINICAL OS</div>
-            </div>
+          <div style={{height:70,display:"flex",alignItems:"center",flexDirection:"column",justifyContent:"center",padding:"0 12px",borderBottom:`1px solid ${C.bd}`,flexShrink:0,gap:2}}>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAADVCAYAAAAmTCnuAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAABQKADAAQAAAABAAAA1QAAAACw5VwxAAApBElEQVR4Ae2dCZxdRZ3vq8529963dGclJCEbSQighCVs+gbRcRSDgyKK+ByfyAygKOP48TXjzHPUT9QRBxUVUWRc4jqoEJEtUSOYgCQEkhCSSDqddHpPd9/tLPV+de69nU53J+nudN74kl8l9/a559Ryzvfc+p1/Vf2rrhAMJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJEACJ4uAebIyZr5FArfcEhFLl0ZEKqXEnj3BSeCCe9gYEyLuCDEgkb9/EspgliRwShLQFYbhZBD47B0NojLVZPrBDJH3k37M2i+U/WfRuuNV0Xx/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tYncwa35g89iGfgTX96o5r0/T0Wq5i4S+LEjy7Ic33Vzbn9Xi7nr1S2tD71pfMtN/eWA45mQAAmcYgT0QAi7G06xm8rLIQESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIAESIIH/3wj8Xy44xJ/4it5UAAAAAElFTkSuQmCC" alt="HAPMS" style={{height:44,objectFit:"contain",filter:"drop-shadow(0 1px 6px rgba(97,139,74,.22))"}}/>
+            <div style={{fontSize:9,color:C.t4,fontFamily:C.mo,letterSpacing:".12em",textTransform:"uppercase",lineHeight:1}}>Built for Better Health</div>
           </div>
 
           {/* Nav */}
           <nav style={{flex:1,padding:"8px 8px",overflowY:"auto"}}>
             {nav.map(n=>(
-              <button key={n.id} onClick={()=>setActive(n.id)} style={{display:"flex",alignItems:"center",gap:9,padding:"8px 10px",borderRadius:7,border:"none",cursor:"pointer",width:"100%",textAlign:"left",background:active===n.id?"rgba(255,255,255,.07)":"transparent",color:active===n.id?C.tx:C.t3,transition:"all .14s",fontFamily:C.fn,fontSize:13,fontWeight:active===n.id?500:400,marginBottom:1,position:"relative"}} onMouseEnter={e=>{if(active!==n.id){e.currentTarget.style.background="rgba(255,255,255,.04)";e.currentTarget.style.color=C.t2;}}} onMouseLeave={e=>{if(active!==n.id){e.currentTarget.style.background="transparent";e.currentTarget.style.color=C.t3;}}}>
+              <button key={n.id} onClick={()=>setActive(n.id)} style={{display:"flex",alignItems:"center",gap:9,padding:"8px 10px",borderRadius:7,border:"none",cursor:"pointer",width:"100%",textAlign:"left",background:active===n.id?"rgba(97,139,74,.10)":"transparent",color:active===n.id?C.tx:C.t3,transition:"all .14s",fontFamily:C.fn,fontSize:13,fontWeight:active===n.id?500:400,marginBottom:1,position:"relative"}} onMouseEnter={e=>{if(active!==n.id){e.currentTarget.style.background="rgba(97,139,74,.06)";e.currentTarget.style.color=C.t2;}}} onMouseLeave={e=>{if(active!==n.id){e.currentTarget.style.background="transparent";e.currentTarget.style.color=C.t3;}}}>
                 {active===n.id&&<span style={{position:"absolute",left:0,top:"50%",transform:"translateY(-50%)",width:2,height:16,borderRadius:"0 2px 2px 0",background:rCol}}/>}
                 <span style={{color:active===n.id?rCol:C.t4,flexShrink:0,marginLeft:4}}><NavIcon id={n.id}/></span>
                 <span style={{flex:1}}>{n.label}</span>
@@ -1238,7 +1662,7 @@ function App(){
         {/* Main */}
         <main style={{flex:1,marginLeft:240,display:"flex",flexDirection:"column",minHeight:"100vh"}}>
           {/* Header */}
-          <header style={{height:56,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 32px",borderBottom:`1px solid ${C.bd}`,position:"sticky",top:0,zIndex:50,background:"rgba(11,13,15,.95)",backdropFilter:"blur(12px)",gap:16,flexShrink:0}}>
+          <header style={{height:56,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 32px",borderBottom:`1px solid ${C.bd}`,position:"sticky",top:0,zIndex:50,background:"rgba(244,251,247,.96)",backdropFilter:"blur(12px)",gap:16,flexShrink:0}}>
             <div>
               <h1 style={{fontSize:15,fontWeight:600,color:C.tx,letterSpacing:"-.01em",lineHeight:1}}>{TITLES[active]}</h1>
               <div style={{fontSize:11,color:C.t4,fontFamily:C.mo,marginTop:3,letterSpacing:".04em"}}>{new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div>
